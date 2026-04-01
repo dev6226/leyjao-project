@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@layer utilities {
+    .custom-gray {
+        color: #898989;
+    }
+}
