@@ -6,6 +6,8 @@ import AllCustomer from "../../assets/allcustomer.png"
 import Pending from "../../assets/pending.png"
 import Paid from "../../assets/paid.png"
 import Inventory from "../../assets/inventory.png"
+import Expense from "../../assets/expense-image.png"
+import Employee from "../../assets/employee-image.png"
 
 const navItems = [
     {
@@ -23,13 +25,14 @@ const navItems = [
         ]
     },
     { label: 'Vendors', icon: '/assets/logo5.png', href: '#' },
-    { label: 'Employees', icon: '/assets/logo14.png', href: '#' },
     {
-        label: 'Expenses', icon: '/assets/logo19.png', submenu: [
+        label: 'Expenses', icon: Expense, submenu: [
             { label: 'Expenses', href: '#' },
             { label: 'Expense Heads', href: '#' },
         ]
     },
+    { label: 'Employees', icon: Employee, href: '#' },
+    
 ]
 
 const NavItem = ({ item, collapsed }) => {

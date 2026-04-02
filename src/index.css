@@ -4,4 +4,12 @@
     .custom-gray {
         color: #898989;
     }
+
+    .text-primary {
+        color: #0F1729;
+    }
+
+    .text-secondary {
+        color: #898989;
+    }
 }

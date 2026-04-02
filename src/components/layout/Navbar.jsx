@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import navItems from '../../data/navItems'
+import Profile from "../../assets/ley-joo-image.png"
 
 const BellIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
@@ -51,8 +52,8 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop Navbar */}
-      <header className="hidden lg:flex w-full items-center bg-[#FFFFFF] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] px-6 py-4 sticky top-0 z-30">
-        <div className="bg-[#FFFFFF] w-full h-[62px] border-[1px] border-[#CBD5E1] rounded-[12px]">
+      <header className="hidden lg:flex w-full items-center  px-6 py-4 sticky top-0 z-30">
+        <div className="w-full bg-[#FFFFFF] h-[62px] border-[1px] border-[#E1E7EF] rounded-[12px] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)]">
           <div className="flex items-center justify-between px-4 h-full">
             <h1 className="text-[20px] font-semibold text-[#0F172A]">Dashboard</h1>
 
@@ -67,7 +68,7 @@ const Navbar = () => {
               <div className="relative">
                 <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-3 px-3 py-1 focus:outline-none">
                   <div className="h-10 w-10 overflow-hidden rounded-full bg-indigo-100">
-                    <img src="/assets/company-img.png" alt="Profile" className="h-full w-full object-cover" />
+                    <img src={Profile} alt="Profile" className="h-full w-full object-cover" />
                   </div>
                   <div className="hidden text-left sm:block">
                     <p className="text-[13.72px] font-semibold text-[#000000]">Leyjao</p>
