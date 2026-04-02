@@ -56,15 +56,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between px-4 h-full">
             <h1 className="text-[20px] font-semibold text-[#0F172A]">Dashboard</h1>
 
-            <div className="flex items-center gap-4">
-              {/* Search */}
-              <div className="flex h-[38px] border-[#E2E8F0] border-[1px] items-center rounded-lg bg-[#FFFFFF]">
-                <input type="search" placeholder="Search..." className="ml-2 bg-transparent text-[12px] text-[#000000] w-[241px] placeholder:text-slate-400 focus:outline-none border-0" />
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400 mr-3" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197M15.803 15.803A6.75 6.75 0 1010.5 17.25a6.75 6.75 0 005.303-1.447z" />
-                </svg>
-              </div>
-
+            <div className="flex items-center gap-4"> 
               {/* Notification */}
               <button type="button" className="relative h-[38px] w-[38px] flex items-center justify-center rounded-[8px] bg-[#F1F5F9]">
                 <span className="absolute -top-2 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-[3px] bg-[#BD2F30] text-[10px] font-semibold text-white">2</span>
@@ -78,8 +70,8 @@ const Navbar = () => {
                     <img src="/assets/company-img.png" alt="Profile" className="h-full w-full object-cover" />
                   </div>
                   <div className="hidden text-left sm:block">
-                    <p className="text-[13.72px] font-semibold text-[#000000]">Naya Food Comp.</p>
-                    <p className="text-[11.76px] text-[#A7ABAE]">Admin</p>
+                    <p className="text-[13.72px] font-semibold text-[#000000]">Leyjao</p>
+                    <p className="text-[11.76px] text-[#A7ABAE]">Admin Manager</p>
                   </div>
                 </button>
                 {profileOpen && (
