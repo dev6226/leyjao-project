@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import navItems from '../../data/navItems'
 import Profile from "../../assets/ley-joo-image.png"
+import Logo from "../../assets/logo.png"
 
 const BellIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
@@ -38,8 +39,15 @@ const MobileNavItem = ({ item }) => {
 
   return (
     <li>
-      <a href={item.href} className="group flex h-[60px] w-full items-center gap-3 rounded-lg bg-[#FFFFFF] px-3 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-[#BD2F30] hover:text-white">
-        <span className="text-[14px] font-medium text-[#0F172A] group-hover:text-white">{item.label}</span>
+      <a
+        href={item.href}
+        className="flex h-[60px] items-center gap-3 rounded-lg bg-white px-3 text-sm font-medium text-[#0F172A] transition-all duration-200 hover:bg-[#0062BD] hover:text-white"
+      >
+        {/* Icon */}
+        <img src={item.icon} alt={item.label} className="w-4 h-4" />
+
+        {/* Label */}
+        <span>{item.label}</span>
       </a>
     </li>
   )
@@ -57,7 +65,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between px-4 h-full">
             <h1 className="text-[20px] font-semibold text-[#0F172A]">Dashboard</h1>
 
-            <div className="flex items-center gap-4"> 
+            <div className="flex items-center gap-4">
               {/* Notification */}
               <button type="button" className="relative h-[38px] w-[38px] flex items-center justify-center rounded-[8px] bg-[#F1F5F9]">
                 <span className="absolute -top-2 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-[3px] bg-[#BD2F30] text-[10px] font-semibold text-white">2</span>
@@ -90,10 +98,9 @@ const Navbar = () => {
       {/* Mobile Navbar */}
       <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 lg:hidden sticky top-0 z-40 bg-white">
         <div className="flex items-center gap-3">
-          <span className="inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl">
-            <img src="/assets/nayafoodlogo.png" alt="Naya Food logo" className="h-full w-full object-contain" />
+          <span className="inline-flex items-center justify-center overflow-hidden rounded-xl">
+            <img src={Logo} alt="LeyJao logo" className="h-full w-full object-contain" />
           </span>
-          <span className="text-lg font-semibold text-slate-800">Naya Food</span>
         </div>
         <div className="flex items-center gap-2">
           <button type="button" className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white">
@@ -101,7 +108,7 @@ const Navbar = () => {
             <BellIcon />
           </button>
           <div className="h-10 w-10 overflow-hidden rounded-full bg-indigo-100">
-            <img src="/assets/company-img.png" alt="Profile" className="h-full w-full object-cover" />
+            <img src={Profile} alt="Profile" className="h-full w-full object-cover" />
           </div>
           <button onClick={() => setDrawerOpen(true)} type="button" className="flex h-10 w-10 items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 20 12" fill="none">
@@ -117,11 +124,10 @@ const Navbar = () => {
       {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-50 bg-white transform transition-transform duration-300 lg:hidden ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl">
-              <img src="/assets/nayafoodlogo.png" alt="Naya Food logo" className="h-full w-full object-contain" />
+          <div className="items-center">
+            <span className="inline-flex items-center justify-center overflow-hidden rounded-xl">
+              <img src={Logo} alt="LeyJao logo" className="h-full w-full object-contain" />
             </span>
-            <span className="text-lg font-semibold text-slate-800">Naya Food</span>
           </div>
           <button onClick={() => setDrawerOpen(false)} className="flex h-10 w-10 items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -129,9 +135,10 @@ const Navbar = () => {
             </svg>
           </button>
         </div>
-        <div className="h-[calc(100%-64px)] overflow-y-auto px-6 py-5">
+        <div className="h-[calc(100%-64px)] overflow-y-auto px-2 py-5">
           <ul className="space-y-2">
             {navItems.map(item => <MobileNavItem key={item.label} item={item} />)}
+            <img src={navItems.icon} alt="" />
           </ul>
         </div>
       </div>

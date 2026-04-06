@@ -32,7 +32,7 @@ const navItems = [
         ]
     },
     { label: 'Employees', icon: Employee, href: '#' },
-    
+
 ]
 
 const NavItem = ({ item, collapsed }) => {
@@ -104,15 +104,20 @@ const NavItem = ({ item, collapsed }) => {
 
 const Sidebar = ({ collapsed, onToggle }) => {
     return (
-        <aside className={`hidden lg:flex flex-col flex-shrink-0 bg-white shadow-[12.67px_0px_22.52px_0px_rgba(208,210,218,0.15)] sticky top-0 h-screen transition-all duration-300 ease-in-out ${collapsed ? 'w-[72px]' : 'w-[260px]'}`}>
+        <aside className={`hidden lg:flex flex-col flex-shrink-0 bg-white shadow-[12.67px_0px_22.52px_0px_rgba(208,210,218,0.15)] sticky top-0 h-screen transition-all duration-300     ease-in-out ${collapsed ? 'w-[72px]' : 'w-[260px]'}`}>
 
             {/* Header */}
-            <div className="flex items-center justify-center gap-x-1">
+            <div className={`flex items-center mx-4 transition-all duration-300 ${collapsed ? 'justify-between' : 'justify-between'}`}>
 
-                <span className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl transition-all duration-300">
-                    <img src={Logo} alt="LeyJao logo" />
+                {/* Logo */}
+                <span
+                    className={`inline-flex items-center justify-center overflow-hidden rounded-xl transition-all duration-300 ease-in-out
+                ${collapsed ? 'opacity-0 scale-75 w-0 h-0' : 'opacity-100 scale-100 p-2'}`}
+                >
+                    <img src={Logo} alt="LeyJao logo" className='w-[100px] h-[48px]' />
                 </span>
 
+                {/* Toggle Button */}
                 <button
                     onClick={onToggle}
                     type="button"
@@ -123,6 +128,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
                         <path d="M1 11H19M1 6H19M1 1H19" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
+
             </div>
 
             {/* Nav */}
