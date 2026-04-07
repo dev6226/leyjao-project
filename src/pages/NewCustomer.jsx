@@ -62,11 +62,8 @@ const NewCustomer = () => {
       </div>
       {/* grid-cols */}
       <div className='grid grid-cols-1 lg:grid-cols-12 mt-5 gap-4'>
-
         <div className='lg:col-span-9 bg-white rounded-xl border border-[#E1E7EF] shadow-[0px_3px_4px_rgba(218,218,218,0.6)]'>
-
           <div className='p-4 sm:p-6'>
-
             {/* Header */}
             <div className='flex items-center gap-3'>
               <img src={CustomerInformation} alt="" />
@@ -171,13 +168,13 @@ const NewCustomer = () => {
                   <input
                     type='text'
                     placeholder='Enter designation'
-                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]'
+                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'
                   />
                 </div>
 
                 <div>
                   <label className='text-sm sm:text-base font-semibold text-primary'>Time Period</label>
-                  <select className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]'>
+                  <select className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'>
                     <option>Select</option>
                   </select>
                 </div>
@@ -187,7 +184,7 @@ const NewCustomer = () => {
                   <input
                     type='text'
                     placeholder='20k - 500k'
-                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]'
+                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'
                   />
                 </div>
 
@@ -196,7 +193,7 @@ const NewCustomer = () => {
                   <input
                     type='text'
                     placeholder='0300-0000000'
-                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]'
+                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'
                   />
                 </div>
               </div>
@@ -259,11 +256,8 @@ const NewCustomer = () => {
 
       {/* guarantor-1 */}
       <div className='grid grid-cols-1 lg:grid-cols-12 mt-5 gap-4'>
-
         <div className='lg:col-span-9 bg-white rounded-xl border border-[#E1E7EF] shadow-[0px_3px_4px_rgba(218,218,218,0.6)]'>
-
           <div className='p-4 sm:p-6'>
-
             {/* Header */}
             <div className='flex items-center gap-3'>
               <img src={CustomerInformation} alt="" />
@@ -341,12 +335,12 @@ const NewCustomer = () => {
                 <div>
                   <label className='text-sm sm:text-base font-semibold text-primary'>Designation</label>
                   <input type='text' placeholder='Enter designation'
-                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]' />
+                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                 </div>
 
                 <div>
                   <label className='text-sm sm:text-base font-semibold text-primary'>Time Period</label>
-                  <select className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]'>
+                  <select className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'>
                     <option>Select</option>
                   </select>
                 </div>
@@ -354,13 +348,13 @@ const NewCustomer = () => {
                 <div>
                   <label className='text-sm sm:text-base font-semibold text-primary'>Salary</label>
                   <input type='text' placeholder='20k - 500k'
-                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]' />
+                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                 </div>
 
                 <div>
                   <label className='text-sm sm:text-base font-semibold text-primary'>Phone Number</label>
                   <input type='text' placeholder='0300-0000000'
-                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]' />
+                    className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                 </div>
               </div>
             </div>
@@ -422,9 +416,7 @@ const NewCustomer = () => {
 
       {/* guarantor-2 */}
       <div className='grid grid-cols-1 lg:grid-cols-12 mt-5 gap-4'>
-
         <div className='lg:col-span-9 bg-white rounded-xl border border-[#E1E7EF] shadow-[0px_3px_4px_rgba(218,218,218,0.6)]'>
-
           {
             guarantors.map((g, index) => (
               <div key={index} className="transition-all duration-500 ease-in-out animate-[fadeIn_0.5s_forwards]">
@@ -508,12 +500,12 @@ const NewCustomer = () => {
                       <div>
                         <label className='text-sm sm:text-base font-semibold text-primary'>Designation</label>
                         <input type='text' placeholder='Enter designation'
-                          className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]' />
+                          className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                       </div>
 
                       <div>
                         <label className='text-sm sm:text-base font-semibold text-primary'>Time Period</label>
-                        <select className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]'>
+                        <select className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'>
                           <option>Select</option>
                         </select>
                       </div>
@@ -521,13 +513,13 @@ const NewCustomer = () => {
                       <div>
                         <label className='text-sm sm:text-base font-semibold text-primary'>Salary</label>
                         <input type='text' placeholder='20k - 500k'
-                          className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]' />
+                          className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                       </div>
 
                       <div>
                         <label className='text-sm sm:text-base font-semibold text-primary'>Phone Number</label>
                         <input type='text' placeholder='0300-0000000'
-                          className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF]' />
+                          className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                       </div>
                     </div>
                   </div>
