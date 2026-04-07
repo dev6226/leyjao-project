@@ -412,7 +412,7 @@ const NewCustomer = () => {
 
           {
             guarantors.map((g, index) => (
-              <div key={index} className="transition-all duration-500 ease-in-out opacity-0 animate-[fadeIn_0.5s_forwards]">
+              <div key={index} className="transition-all duration-500 ease-in-out animate-[fadeIn_0.5s_forwards]">
 
                 {/* dynamically-guarantor-form */}
                 <div className='p-4 sm:p-6'>
@@ -540,7 +540,7 @@ const NewCustomer = () => {
                         console.log("cnic front", updated)
                         updated[index].cnicFront = URL.createObjectURL(e.target.files[0])
                         setGuarantors(updated)
-                        console.log(setGuarantors(updated))
+                        (setGuarantors(updated))
                       }} />
                     </div>
 
@@ -844,7 +844,6 @@ const NewCustomer = () => {
 
         {/* Right column (visible everywhere) */}
         <div className='col-span-1 lg:col-span-3'></div>
-
       </div>
     </main>
   )
