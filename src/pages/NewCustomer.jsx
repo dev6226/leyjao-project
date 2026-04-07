@@ -5,9 +5,13 @@ import CustomerInformation from "../assets/information-image.png"
 const NewCustomer = () => {
   const [backimage, setBackimage] = useState(null)
   const [frontimage, setFrontimage] = useState(null)
-
   const [guarantorBackimage, setGuarantorBackimage] = useState(null)
   const [guarantorFrontimage, setGuarantorFrontimage] = useState(null)
+  const [checkfrontcnic, setCheckfrontcnic] = useState(null)
+  const [checkbackcnic, setCheckbackcnic] = useState(null)
+  const [checkDetail, setCheckDetail] = useState(null)
+  const [productDetail, setProductDetail] = useState(null)
+
 
   const [guarantors, setGuarantors] = useState([{
     fullName: "",
@@ -28,12 +32,23 @@ const NewCustomer = () => {
     cnicBack: null
   }])
 
-
+  // customer
   const frontRef = useRef(null)
   const backRef = useRef(null)
 
+  // cheque-details
+  const checkfrontRef = useRef(null)
+  const checkbackRef = useRef(null)
+
+  // guarantor1
   const g1frontRef = useRef(null)
   const g1backRef = useRef(null)
+
+  // cheque-section
+  const chequeRef = useRef(null)
+
+  // product-detail
+  const productDetailRef = useRef(null)
   return (
     <main>
       {/* text */}
@@ -540,7 +555,6 @@ const NewCustomer = () => {
                         console.log("cnic front", updated)
                         updated[index].cnicFront = URL.createObjectURL(e.target.files[0])
                         setGuarantors(updated)
-                        (setGuarantors(updated))
                       }} />
                     </div>
 
@@ -661,32 +675,32 @@ const NewCustomer = () => {
               {/* cheque-photo */}
               <div className='flex flex-col items-center'>
                 <div
-                  onClick={() => g1backRef.current.click()}
+                  onClick={() => chequeRef.current.click()}
                   className='w-32 sm:w-40 h-28 sm:h-32 border-2 border-dashed border-[#CBD5E1] rounded-lg flex items-center justify-center cursor-pointer'
                 >
-                  {guarantorBackimage ? (
-                    <img src={guarantorBackimage} className='w-full h-full object-cover' />
+                  {checkDetail ? (
+                    <img src={checkDetail} className='w-full h-full object-cover' />
                   ) : (
                     <span className='text-xs sm:text-sm text-gray-500'>Cheque Photo </span>
                   )}
                 </div>
 
-                <p className='text-xs sm:text-sm font-semibold mt-2'>CNIC Back</p>
+                <p className='text-xs sm:text-sm font-semibold mt-2'>Cheque Photo </p>
 
-                <input type="file" ref={g1backRef} className='hidden' onChange={(e) => {
+                <input type="file" ref={chequeRef} className='hidden' onChange={(e) => {
                   const file = e.target.files[0]
-                  if (file) setGuarantorBackimage(URL.createObjectURL(file))
+                  if (file) setCheckDetail(URL.createObjectURL(file))
                 }} />
               </div>
 
               {/* CNIC Front */}
               <div className='flex flex-col items-center'>
                 <div
-                  onClick={() => g1frontRef.current.click()}
+                  onClick={() => checkfrontRef.current.click()}
                   className='w-32 sm:w-40 h-28 sm:h-32 border-2 border-dashed border-[#CBD5E1] rounded-lg flex items-center justify-center cursor-pointer'
                 >
-                  {guarantorFrontimage ? (
-                    <img src={guarantorFrontimage} className='w-full h-full object-cover' />
+                  {checkfrontcnic ? (
+                    <img src={checkfrontcnic} className='w-full h-full object-cover' />
                   ) : (
                     <span className='text-xs sm:text-sm text-gray-500'>Add Photo</span>
                   )}
@@ -694,20 +708,20 @@ const NewCustomer = () => {
 
                 <p className='text-xs sm:text-sm font-semibold mt-2'>CNIC Front</p>
 
-                <input type="file" ref={g1frontRef} className='hidden' onChange={(e) => {
+                <input type="file" ref={checkfrontRef} className='hidden' onChange={(e) => {
                   const file = e.target.files[0]
-                  if (file) setGuarantorFrontimage(URL.createObjectURL(file))
+                  if (file) setCheckfrontcnic(URL.createObjectURL(file))
                 }} />
               </div>
 
               {/* CNIC Back */}
               <div className='flex flex-col items-center'>
                 <div
-                  onClick={() => g1backRef.current.click()}
+                  onClick={() => checkbackRef.current.click()}
                   className='w-32 sm:w-40 h-28 sm:h-32 border-2 border-dashed border-[#CBD5E1] rounded-lg flex items-center justify-center cursor-pointer'
                 >
-                  {guarantorBackimage ? (
-                    <img src={guarantorBackimage} className='w-full h-full object-cover' />
+                  {checkbackcnic ? (
+                    <img src={checkbackcnic} className='w-full h-full object-cover' />
                   ) : (
                     <span className='text-xs sm:text-sm text-gray-500'>Add Photo</span>
                   )}
@@ -715,14 +729,12 @@ const NewCustomer = () => {
 
                 <p className='text-xs sm:text-sm font-semibold mt-2'>CNIC Back</p>
 
-                <input type="file" ref={g1backRef} className='hidden' onChange={(e) => {
+                <input type="file" ref={checkbackRef} className='hidden' onChange={(e) => {
                   const file = e.target.files[0]
-                  if (file) setGuarantorBackimage(URL.createObjectURL(file))
+                  if (file) setCheckbackcnic(URL.createObjectURL(file))
                 }} />
               </div>
-
             </div>
-
           </div>
         </div>
 
@@ -733,11 +745,8 @@ const NewCustomer = () => {
 
       {/* product-details */}
       <div className='grid grid-cols-1 lg:grid-cols-12 mt-5 gap-4'>
-
         <div className='lg:col-span-9 bg-white rounded-xl border border-[#E1E7EF] shadow-[0px_3px_4px_rgba(218,218,218,0.6)]'>
-
           <div className='p-4 sm:p-6'>
-
             {/* Header */}
             <div className='flex items-center gap-3'>
               <img src={CustomerInformation} alt="" />
@@ -821,11 +830,11 @@ const NewCustomer = () => {
               {/* product-photo*/}
               <div className='flex flex-col items-center'>
                 <div
-                  onClick={() => g1frontRef.current.click()}
+                  onClick={() => productDetailRef.current.click()}
                   className='w-32 sm:w-40 h-28 sm:h-32 border-2 border-dashed border-[#CBD5E1] rounded-lg flex items-center justify-center cursor-pointer'
                 >
-                  {guarantorFrontimage ? (
-                    <img src={guarantorFrontimage} className='w-full h-full object-cover' />
+                  {productDetail ? (
+                    <img src={productDetail} className='w-full h-full object-cover' />
                   ) : (
                     <span className='text-xs sm:text-sm text-gray-500'>Add Photo</span>
                   )}
@@ -833,9 +842,9 @@ const NewCustomer = () => {
 
                 <p className='text-xs sm:text-sm font-semibold mt-2'>Product Photo</p>
 
-                <input type="file" ref={g1frontRef} className='hidden' onChange={(e) => {
+                <input type="file" ref={productDetailRef} className='hidden' onChange={(e) => {
                   const file = e.target.files[0]
-                  if (file) setGuarantorFrontimage(URL.createObjectURL(file))
+                  if (file) setProductDetail(URL.createObjectURL(file))
                 }} />
               </div>
             </div>
