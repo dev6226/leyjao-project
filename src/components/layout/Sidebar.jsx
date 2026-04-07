@@ -11,10 +11,10 @@ import Employee from "../../assets/employee-image.png"
 
 const navItems = [
     {
-        label: 'Dashboard', icon: Dashboard, href: '#'
+        label: 'Dashboard', icon: Dashboard, href: '/'
     },
-    { label: 'Add Customer', icon: Customer, href: '#' },
-    { label: 'All Customer', icon: AllCustomer, href: '#' },
+    { label: 'Add Customer', icon: Customer, href: '/add-customer' },
+    { label: 'All Customer', icon: AllCustomer, href: '/all-Customer' },
     { label: 'Pending Installment', icon: Pending, href: '#' },
     { label: 'Paid Installment', icon: Paid, href: '#' },
     { label: 'Inventory', icon: Inventory, href: '#' },

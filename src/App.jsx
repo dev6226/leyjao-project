@@ -1,21 +1,31 @@
 import { useState } from 'react'
 import Sidebar from './components/layout/Sidebar'
 import Navbar from './components/layout/Navbar'
+import Dashboard from './pages/dashboard/Dashboard'
 import NewCustomer from './pages/NewCustomer'
+import AllCustomer from './pages/AllCustomer'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F9FAFB]">
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Navbar collapsed={collapsed} />
-        <div className="flex-1 overflow-y-auto p-6">
-          <NewCustomer />
+    <BrowserRouter>
+      <div className="flex h-screen overflow-hidden bg-[#F9FAFB]">
+        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <Navbar collapsed={collapsed} />
+          <div className="flex-1 overflow-y-auto p-6">
+            <Routes>
+              <Route path='/' element={<Dashboard/>}/>
+              <Route path='/add-customer' element={<NewCustomer/>}/>
+              <Route path='/all-Customer' element={<AllCustomer/>}/>
+            </Routes>
+
+          </div>
         </div>
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
 
