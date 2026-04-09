@@ -1,18 +1,11 @@
 import React from 'react'
+import DataTable from './table/DataTable.jsx'
 
-const data = Array(10).fill({
-  date: "10 Dec, 2025",
-  cn: "000-001",
-  name: "Danish Arshad",
-  phone: "03024425829",
-  cnic: "35201-4108698-5",
-  status: "Active",
-})
+
 
 const AllCustomer = () => {
   return (
     <div>
-
       {/* Header */}
       <div>
         <h2 className='text-primary text-xl font-semibold'>
@@ -25,7 +18,6 @@ const AllCustomer = () => {
 
       {/* Search + Filter */}
       <div className='flex flex-col md:flex-row justify-between gap-3 mt-6'>
-
         {/* Search Input with Icon */}
         <div className='relative w-full md:w-[552px]'>
 
@@ -59,63 +51,11 @@ const AllCustomer = () => {
         </button>
 
       </div>
-
-      {/* Table Container */}
-      <div className='mt-6 bg-[#FFFFFF] rounded-2xl'>
-
-        {/* 👇 Horizontal Scroll Wrapper */}
-        <div className='w-full overflow-x-auto'>
-
-          <table className='min-w-[900px] w-full text-sm'>
-
-            {/* Table Head */}
-            <thead>
-              <tr className='text-[#65758B] font-semibold text-base bg-[#F9FAFB] border border-[#E1E7EF]'>
-                <th className='text-left px-6 py-3'>Date</th>
-                <th className='text-left px-6 py-3'>CN #</th>
-                <th className='text-left px-6 py-3'>Name</th>
-                <th className='text-left px-6 py-3'>Phone</th>
-                <th className='text-left px-6 py-3'>CNIC</th>
-                <th className='text-left px-6 py-3'>Status</th>
-                <th className='text-right px-6 py-3'>Action</th>
-              </tr>
-            </thead>
-
-            {/* Table Body */}
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index} className="rounded-xl p-12 bg-[#FFFFFF] border-1 border-[#E1E7EF]">
-
-                  {/* First TD */}
-                  <td className='px-6 py-4'>{item.date}</td>
-                  <td className='px-6 py-4'>{item.cn}</td>
-                  <td className='px-6 py-4'>{item.name}</td>
-                  <td className='px-6 py-4'>{item.phone}</td>
-                  <td className='px-6 py-4'>{item.cnic}</td>
-
-                  {/* Status */}
-                  <td className='px-6 py-4 bg-white'>
-                    <span className='px-3 py-1 text-xs rounded-full bg-green-100 text-green-600'>
-                      {item.status}
-                    </span>
-                  </td>
-
-                  {/* Last TD */}
-                  <td className='px-6 py-4 bg-white rounded-r-xl text-right'>
-                    <div className='flex justify-end gap-3'>
-                      <button className='text-gray-500 hover:text-black'>👁</button>
-                      <button className='text-gray-500 hover:text-black'>✏️</button>
-                    </div>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-
-          </table>
-
-        </div>
+      {/* data-table */}
+      <div>
+      <DataTable/>
       </div>
+
 
       {/* Footer */}
       <div className='mt-6 text-xs text-gray-400 flex flex-col md:flex-row justify-between gap-2'>
