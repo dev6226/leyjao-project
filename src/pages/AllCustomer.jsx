@@ -1,5 +1,5 @@
 import React from 'react'
-import DataTable from './table/DataTable.jsx'
+import DataTable from '../components/table/DataTable.jsx'
 
 
 
@@ -52,7 +52,7 @@ const AllCustomer = () => {
 
       </div>
       {/* data-table */}
-      <div>
+      <div className='mt-4'>
       <DataTable/>
       </div>
 

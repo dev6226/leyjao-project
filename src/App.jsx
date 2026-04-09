@@ -5,6 +5,9 @@ import Dashboard from './pages/dashboard/Dashboard'
 import NewCustomer from './pages/NewCustomer'
 import AllCustomer from './pages/AllCustomer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from './pages/auth/Login.jsx'
+import Register from './pages/auth/Register.jsx'
+
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false)
