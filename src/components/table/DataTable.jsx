@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -69,8 +70,12 @@ export default function Table() {
         },
     ];
 
-    const handleEdit = (row) => alert("Edit: " + row.name);
-    const handleView = (row) => alert("View: " + row.name);
+
+    const navigate = useNavigate();
+
+    const handleNavigate = (row) => {
+        navigate(`/view-Customer/${row.id}`);
+    }
 
     return (
         <div className="w-full mt-6 bg-[#FFFFFF] border border-[#E1E7EF] rounded-lg overflow-hidden">
@@ -106,23 +111,23 @@ export default function Table() {
                                 <div>{row.phone}</div>
                                 <div>{row.cnic}</div>
 
-                                {/* Status */}
+
                                 <div>
                                     <span className="px-3 py-1 text-xs font-semibold rounded-full border border-orange-400 text-orange-500 bg-orange-50">
                                         {row.status}
                                     </span>
                                 </div>
 
-                                {/* Edit */}
+
                                 <div>
                                     <button onClick={() => handleEdit(row)}>
                                         <EditIcon fontSize="small" />
                                     </button>
                                 </div>
 
-                                {/* View */}
+
                                 <div>
-                                    <button onClick={() => handleView(row)}>
+                                    <button className="cursor-pointer" onClick={() => handleNavigate(row)}>
                                         <VisibilityIcon fontSize="small" />
                                     </button>
                                 </div>
