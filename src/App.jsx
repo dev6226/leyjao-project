@@ -19,7 +19,7 @@ const App = () => {
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
         <div className="flex flex-col flex-1 overflow-hidden">
           <Navbar collapsed={collapsed} />
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-3 md:p-6">
             <Routes>
               <Route path='/' element={<Dashboard />} />
               <Route path='/add-customer' element={<NewCustomer />} />
