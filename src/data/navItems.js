@@ -13,8 +13,8 @@ const navItems = [
   },
   { label: 'Add Customer', icon: Customer, href: '/add-customer' },
   { label: 'All Customer', icon: AllCustomer, href: '/all-Customer' },
-  { label: 'Pending Installment', icon: Pending, href: '#' },
-  { label: 'Paid Installment', icon: Paid, href: '#' },
+  { label: 'Pending Installment', icon: Pending, href: '/pending-installments' },
+  { label: 'Paid Installment', icon: Paid, href: '/paid-installments' },
   { label: 'Inventory', icon: Inventory, href: '#' },
   {
     label: 'Products', icon: '/assets/logo10.png', submenu: [

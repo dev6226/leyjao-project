@@ -8,7 +8,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
 import ViewCustomer from './pages/ViewCustomer.jsx'
-
+import Paidinstallment from './pages/Paidinstallment.jsx'
+import InstallmentPayscreen from './pages/InstallmentPayscreen.jsx'
+import PendingInstallment from './pages/PendingInstallment.jsx'
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false)
@@ -25,8 +27,10 @@ const App = () => {
               <Route path='/add-customer' element={<NewCustomer />} />
               <Route path='/all-Customer' element={<AllCustomer />} />
               <Route path='/view-Customer/:id' element={<ViewCustomer />} />
+              <Route path='/paid-installments' element={<Paidinstallment />} />
+              <Route path='/installment-payscreen' element={<InstallmentPayscreen />} />
+              <Route path='/pending-installments' element={<PendingInstallment />} />
             </Routes>
-
           </div>
         </div>
       </div>

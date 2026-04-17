@@ -1,9 +1,110 @@
 import React from 'react'
 import DataTable from '../components/table/DataTable.jsx'
-
+import { useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 
 const AllCustomer = () => {
+  const navigate = useNavigate();
+  const rows = [
+    {
+      id: 1,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Muhammad Umar",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+    {
+      id: 2,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Danish Ali",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+    {
+      id: 3,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Muhammad Bilal",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+    {
+      id: 4,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Lassan Adrak",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+    {
+      id: 5,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Lassan Adrak",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+    {
+      id: 6,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Lassan Adrak",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+    {
+      id: 7,
+      date: "10 Dec, 2025",
+      cn: "000-001",
+      name: "Lassan Adrak",
+      phone: "03024425829",
+      cnic: "35201-4108698-5",
+      status: "Draft",
+    },
+  ];
+
+  const columns = [
+    { key: 'date', label: 'Date' },
+    { key: 'cn', label: 'CN' },
+    { key: 'name', label: 'Name' },
+    { key: 'phone', label: 'Phone' },
+    { key: 'cnic', label: 'CNIC' },
+    {
+      key: 'status', label: 'Status',
+      render: (row) => (
+        <span className="px-3 py-1 text-xs font-semibold rounded-full border border-orange-400 text-orange-500 bg-orange-50">
+          {row.status}
+        </span>
+      )
+    },
+
+    {
+      key: 'edit', label: 'Edit',
+      render: (row) => (
+        <button onClick={() => navigate(`/edit-customer/${row.id}`)}>
+          <EditIcon fontSize="small" />
+        </button>
+      )
+    },
+    {
+      key: 'action', label: 'Action',
+      render: (row) => (
+        <button onClick={() => navigate(`/view-customer/${row.id}`)}>
+          <VisibilityIcon fontSize="small" />
+        </button>
+      )
+    },
+  ];
   return (
     <div>
       {/* Header */}
@@ -53,7 +154,7 @@ const AllCustomer = () => {
       </div>
       {/* data-table */}
       <div className='mt-4'>
-      <DataTable/>
+        <DataTable rows={rows} columns={columns} />
       </div>
 
 
