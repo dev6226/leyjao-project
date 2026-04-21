@@ -92,6 +92,14 @@ const PendingInstallment = () => {
                 </button>
             )
         },
+        {
+            key: '', label: '',
+            render: (rows) => (
+                <button className='h-10 w-24 text-base font-medium rounded-xl text-[#FFFFFF] bg-[#2196F3]'>
+                    Pay
+                </button>
+            )
+        },
     ];
     return (
         <div>
