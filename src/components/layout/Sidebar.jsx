@@ -17,11 +17,18 @@ const navItems = [
     { label: 'All Customer', icon: AllCustomer, href: '/all-Customer' },
     { label: 'Pending Installment', icon: Pending, href: '/pending-installments' },
     { label: 'Paid Installment', icon: Paid, href: '/paid-installments' },
-    { label: 'Inventory', icon: Inventory, href: '#' },
+    {
+        label: 'Inventory', icon: Inventory, href: '#', submenu: [
+            { label: 'Add Product', href: '#' },
+            { label: 'Inventory List', href: '#' },
+            { label: 'Add Brand', href: '/add-brand' },
+        ]
+    },
     {
         label: 'Products', icon: '/assets/logo10.png', submenu: [
             { label: 'Add Vendor', href: '#' },
             { label: 'Vendor List', href: '#' },
+            { label: 'Brand List', href: '/brand-list' },
         ]
     },
     { label: 'Vendors', icon: '/assets/logo5.png', href: '#' },

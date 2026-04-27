@@ -57,6 +57,11 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("token")
+    window.location.href = "/auth/login"
+  }
+
   return (
     <>
       {/* Desktop Navbar */}
@@ -86,7 +91,7 @@ const Navbar = () => {
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                    <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+                    <button onClick={() => handleLogout()} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
                   </div>
                 )}
               </div>
