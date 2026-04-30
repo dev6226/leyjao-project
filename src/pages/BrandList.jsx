@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { data } from "react-router-dom";
 const BrandList = () => {
     const [brands, setBrands] = useState([]);
     // updated-state
