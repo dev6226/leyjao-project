@@ -1,22 +1,22 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 
-const AddCategory = () => {
+const Series = () => {
     const [input, setInput] = useState("")
-    const [createCategory, setCreateCategory] = useState([])
 
-    const token = sessionStorage.getItem("token");
-    const fomrdata = new FormData();
-    fomrdata.append("name", input);
     const handleSave = async () => {
+        const token = sessionStorage.getItem("token");
+        console.log("token", token)
+        const formdata = new FormData();
+        formdata.append("name", input);
+        // API call to save the series would go here, using the token for authentication
         try {
-            const res = await axios.post('https://stage.leyjao.pk/api/category/store', fomrdata, {
+            const res = await axios.post('https://stage.leyjao.pk/api/series/store', formdata, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            console.log("category-Data", res.data);
-            setCreateCategory(res.data)
+            console.log("series-Data", res.data);
             setInput("")
         } catch (error) {
             console.log('error', error)
@@ -27,13 +27,13 @@ const AddCategory = () => {
         <div>
             <div>
                 <h2 className='text-primary text-xl font-semibold'>
-                    Add New Category
+                    Add New Series
                 </h2>
                 <p className='text-secondary text-base mt-1'>
-                    Create a new Category under a brand.
+                    Create a new Series under a brand.
                 </p>
             </div>
-            {/* new-category */}
+            {/* add-series */}
             <div className='mt-5 gap-4'>
                 <div className='bg-white rounded-xl border border-[#E1E7EF] shadow-[0px_3px_4px_rgba(218,218,218,0.6)]'>
                     <div className='p-4 sm:p-6'>
@@ -43,7 +43,7 @@ const AddCategory = () => {
                             {/* Brand Name */}
                             <div className='md:col-span-2'>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>
-                                    Category Name:
+                                    Add Series:
                                 </label>
 
                                 <div className="relative mt-2">
@@ -51,7 +51,7 @@ const AddCategory = () => {
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         type='text'
-                                        placeholder='Enter category name (e.g., Mobile, LED, Laptop)'
+                                        placeholder='Enter Series'
                                         className='w-full h-10 sm:h-11 px-3 pr-10 text-sm sm:text-base rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]'
                                     />
 
@@ -71,7 +71,7 @@ const AddCategory = () => {
                             </div>
                         </div>
                     </div>
-
+        
                 </div>
                 {/* button */}
                 <div className='flex justify-end gap-x-3 mt-8'>
@@ -91,4 +91,4 @@ const AddCategory = () => {
     )
 }
 
-export default AddCategory
+export default Series

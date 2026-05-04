@@ -23,6 +23,7 @@ const navItems = [
             { label: 'Inventory List', href: '#' },
             { label: 'Add Brand', href: '/add-brand' },
             { label: 'Add Category', href: '/add-category' },
+            { label: 'Add Series', href: '/add-series' },
         ]
     },
     {
@@ -31,6 +32,7 @@ const navItems = [
             { label: 'Vendor List', href: '#' },
             { label: 'Brand List', href: '/brand-list' },
             { label: 'Category List', href: '/category-list' },
+            { label: 'Series List', href: '/series-list' },
         ]
     },
     { label: 'Vendors', icon: '/assets/logo5.png', href: '#' },

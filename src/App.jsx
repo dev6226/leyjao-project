@@ -16,6 +16,11 @@ import Addbrand from './pages/Addbrand.jsx'
 import Protectedroute from './pages/auth/Protectedroute.jsx'
 import AddCategory from './pages/AddCategory.jsx'
 import Categorylist from './pages/Categorylist.jsx'
+import Series from './pages/Series.jsx'
+import SeriesList from './pages/SeriesList.jsx'
+
+
+
 const Layout = () => {
   const [collapsed, setCollapsed] = useState(false)
   const location = useLocation()
@@ -48,8 +53,10 @@ const Layout = () => {
             <Route path='/submit-installment' element={<Protectedroute><SubmitInstallment /></Protectedroute>} />
             <Route path='/brand-list' element={<Protectedroute><BrandList /></Protectedroute>} />
             <Route path='/category-list' element={<Protectedroute><Categorylist /></Protectedroute>} />
+            <Route path='/series-list' element={<Protectedroute><SeriesList /></Protectedroute>} />
             <Route path='/add-brand' element={<Protectedroute><Addbrand /></Protectedroute>} />
             <Route path='/add-category' element={<Protectedroute><AddCategory /></Protectedroute>} />
+            <Route path='/add-series' element={<Protectedroute><Series /></Protectedroute>} />
           </Routes>
         </div>
       </div>
