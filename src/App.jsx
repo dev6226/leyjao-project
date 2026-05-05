@@ -18,6 +18,9 @@ import AddCategory from './pages/AddCategory.jsx'
 import Categorylist from './pages/Categorylist.jsx'
 import Series from './pages/Series.jsx'
 import SeriesList from './pages/SeriesList.jsx'
+import ProductModle from './pages/ProductModle'
+import ModelsList from './pages/ModelsList.jsx'
+import AddProduct from './pages/AddProduct.jsx'
 
 
 
@@ -54,9 +57,12 @@ const Layout = () => {
             <Route path='/brand-list' element={<Protectedroute><BrandList /></Protectedroute>} />
             <Route path='/category-list' element={<Protectedroute><Categorylist /></Protectedroute>} />
             <Route path='/series-list' element={<Protectedroute><SeriesList /></Protectedroute>} />
+            <Route path='/models-list' element={<Protectedroute><ModelsList /></Protectedroute>} />
             <Route path='/add-brand' element={<Protectedroute><Addbrand /></Protectedroute>} />
             <Route path='/add-category' element={<Protectedroute><AddCategory /></Protectedroute>} />
             <Route path='/add-series' element={<Protectedroute><Series /></Protectedroute>} />
+            <Route path='/add-models' element={<Protectedroute><ProductModle /></Protectedroute>} />
+            <Route path='/add-products' element={<Protectedroute><AddProduct /></Protectedroute>} />
           </Routes>
         </div>
       </div>

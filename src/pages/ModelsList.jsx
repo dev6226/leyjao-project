@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
-const SeriesList = () => {
-    const [series, setSeries] = useState([]);
+const ModelsList = () => {
+    const [models, setModels] = useState([]);
     const [isModel, setIsModel] = useState(null);
     const [name, setName] = useState("");
-    const [selectedSeries, setSelectedSeries] = useState(null);
+    const [selectedModels, setSelectedModels] = useState(null);
 
     // fetch-category-list-api
     useEffect(() => {
         const token = sessionStorage.getItem("token");
         console.log("token", token)
-        const fetchSeriesList = async () => {
+        const fetchModelsList = async () => {
             try {
-                const res = await axios.get("https://stage.leyjao.pk/api/series?per_page=-1", {
+                const res = await axios.get("https://stage.leyjao.pk/api/product-model?per_page=-1", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 })
                 console.log('category-list-api-data', res.data)
-                setSeries(res.data.data);
+                setModels(res.data.data);
             } catch (error) {
                 console.log('error', error)
             }
         }
-        fetchSeriesList();
+        fetchModelsList();
     }, [])
 
     // handle-delete-category
-    const handleDeletesSeries = async (id) => {
+    const handleDeleteCat = async (id) => {
         console.log("Delete ID:", id)
         const token = sessionStorage.getItem("token");
         console.log("token", token)
@@ -36,21 +36,21 @@ const SeriesList = () => {
         if (!confirmDelete) return;
         try {
             const token = sessionStorage.getItem("token");
-            await axios.delete(`https://stage.leyjao.pk/api/series/delete/${id}`, {
+            await axios.delete(`https://stage.leyjao.pk/api/product-model/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setSeries((prev) => prev.filter((item) => item.id !== id));
+            setModels((prev) => prev.filter((item) => item.id !== id));
         } catch (error) {
             console.log("delete error", error);
         }
     }
 
     // for-model
-    const handleEditClick = (series) => {
-        setSelectedSeries(series);
-        setName(series.name);
+    const handleEditClick = (model) => {
+        setSelectedModels(model);
+        setName(model.name);
         setIsModel(true);
     };
 
@@ -61,28 +61,29 @@ const SeriesList = () => {
         const formdata = new FormData();
         formdata.append("name", name);
         try {
-            const res = await axios.post(`https://stage.leyjao.pk/api/series/update/${selectedSeries.id}`, formdata, {
+            const res = await axios.post(`https://stage.leyjao.pk/api/product-model/update/${selectedModels.id}`, formdata, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             })
             console.log("my updated-response", res.data.data);
             // updateUI without pagereload
-            const updatedSeries = series.map((series) =>
-                series.id === selectedSeries.id
+            const updatedModles = models.map((model) =>
+                model.id === selectedModels.id
                     ? {
-                        ...series,
+                        ...model,
                         name: name,
                     }
-                    : series
+                    : model
             );
-            setSeries(updatedSeries);
+            setModels(updatedModles);
             setIsModel(false);
         } catch (error) {
             console.log("update ka error hai ", error.response);
             console.log("update ka error hai data ka ", error.response?.data);
         }
     }
+
     return (
         <div>
             <div className="p-4 md:p-6">
@@ -105,14 +106,14 @@ const SeriesList = () => {
                                 {/* Rows */}
                                 <div className="flex flex-col gap-3 mt-3 mb-3">
 
-                                    {series.length === 0 ? (
+                                    {models.length === 0 ? (
                                         <div className="text-center py-6 text-gray-400">
                                             No Data Found
                                         </div>
                                     ) : (
-                                        series.map((series) => (
+                                        models.map((model) => (
                                             <div
-                                                key={series.id}
+                                                key={model.id}
                                                 className="items-center bg-white border border-gray-200 rounded-xl mx-4 px-4 py-4 shadow-sm hover:shadow-md transition text-[#4C4E53] text-sm font-medium"
                                                 style={{
                                                     display: "grid",
@@ -122,19 +123,19 @@ const SeriesList = () => {
 
                                                 {/* Name */}
                                                 <div className="font-semibold text-gray-800 text-base">
-                                                    {series.name}
+                                                    {model.name}
                                                 </div>
 
                                                 {/* Actions */}
                                                 <div className="flex justify-center gap-2">
                                                     <button
-                                                        onClick={() => handleEditClick(series)}
+                                                        onClick={() => handleEditClick(model)}
                                                         className="px-4 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition">
                                                         Edit
                                                     </button>
 
                                                     <button
-                                                        onClick={() => handleDeletesSeries(series.id)}
+                                                        onClick={() => handleDeleteCat(model.id)}
                                                         className="px-4 py-1.5 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
                                                     >
                                                         Delete
@@ -154,7 +155,7 @@ const SeriesList = () => {
                             <div className="bg-white p-6 rounded-xl w-[400px]">
 
                                 <h2 className="text-lg font-semibold mb-4">
-                                    Edit Series
+                                    Edit Model
                                 </h2>
 
                                 {/* Name */}
@@ -191,4 +192,4 @@ const SeriesList = () => {
     )
 }
 
-export default SeriesList
+export default ModelsList

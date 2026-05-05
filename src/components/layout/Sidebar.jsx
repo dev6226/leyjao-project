@@ -19,11 +19,12 @@ const navItems = [
     { label: 'Paid Installment', icon: Paid, href: '/paid-installments' },
     {
         label: 'Inventory', icon: Inventory, href: '#', submenu: [
-            { label: 'Add Product', href: '#' },
+            { label: 'Add Product', href: '/add-products' },
             { label: 'Inventory List', href: '#' },
             { label: 'Add Brand', href: '/add-brand' },
             { label: 'Add Category', href: '/add-category' },
             { label: 'Add Series', href: '/add-series' },
+            { label: 'Add Models', href: '/add-models' },
         ]
     },
     {
@@ -33,6 +34,7 @@ const navItems = [
             { label: 'Brand List', href: '/brand-list' },
             { label: 'Category List', href: '/category-list' },
             { label: 'Series List', href: '/series-list' },
+            { label: 'Models List', href: '/models-list' },
         ]
     },
     { label: 'Vendors', icon: '/assets/logo5.png', href: '#' },

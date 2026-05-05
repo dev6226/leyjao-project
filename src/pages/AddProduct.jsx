@@ -1,9 +1,8 @@
-import axios from 'axios';
 import React, { useState } from 'react'
 
-const AddCategory = () => {
+const AddProduct = () => {
     const [input, setInput] = useState("")
-    const [createCategory, setCreateCategory] = useState([])
+    const [createProduct, setCreateProduct] = useState([])
 
     const token = sessionStorage.getItem("token");
     const fomrdata = new FormData();
@@ -16,21 +15,22 @@ const AddCategory = () => {
                 }
             })
             console.log("category-Data", res.data);
-            setCreateCategory(res.data)
+            setCreateProduct(res.data)
             setInput("")
         } catch (error) {
             console.log('error', error)
 
         }
     }
+
     return (
         <div>
             <div>
                 <h2 className='text-primary text-xl font-semibold'>
-                    Add New Category
+                    Add New Product
                 </h2>
                 <p className='text-secondary text-base mt-1'>
-                    Create a new Category under a brand.
+                    Create a new Product under a brand.
                 </p>
             </div>
             {/* new-category */}
@@ -42,7 +42,7 @@ const AddCategory = () => {
                             {/* Brand Name */}
                             <div className='md:col-span-2'>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>
-                                    Category Name:
+                                    Product Name:
                                 </label>
 
                                 <div className="relative mt-2">
@@ -90,4 +90,4 @@ const AddCategory = () => {
     )
 }
 
-export default AddCategory
+export default AddProduct
