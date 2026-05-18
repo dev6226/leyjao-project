@@ -35,6 +35,7 @@ const navItems = [
             { label: 'Category List', href: '/category-list' },
             { label: 'Series List', href: '/series-list' },
             { label: 'Models List', href: '/models-list' },
+            { label: 'Products List', href: '/products-list' },
         ]
     },
     { label: 'Vendors', icon: '/assets/logo5.png', href: '#' },
@@ -44,7 +45,12 @@ const navItems = [
             { label: 'Expense Heads', href: '#' },
         ]
     },
-    { label: 'Employees', icon: Employee, href: '#' },
+    {
+        label: 'Employees', icon: Employee, submenu: [
+            { label: 'Add Employee', href: '/add-employee' },
+            { label: 'Employee List', href: '/employee-list' },
+        ]
+    },
 
 ]
 
