@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Upload } from 'lucide-react'
 import api from '../api/api'
 import toast from 'react-hot-toast'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const Addemployee = () => {
+
+    const { id } = useParams()
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const [preview, setPreview] = useState({
@@ -36,6 +40,83 @@ const Addemployee = () => {
         cnic_back: null,
     })
 
+    // updated-code
+    useEffect(() => {
+
+        if (id) {
+            fetchEmployee()
+        }
+
+    }, [id])
+
+    const fetchEmployee = async () => {
+
+        try {
+
+            setLoading(true)
+
+            const response = await api.get('/employee', {
+                params: { id }
+            })
+
+            if (response.data && response.data.data) {
+
+                const selectedEmployee = response.data.data.find(
+                    (emp) => emp.id === parseInt(id)
+                )
+
+                if (selectedEmployee) {
+
+                    setFormData({
+                        name: selectedEmployee.name || '',
+                        father_name: selectedEmployee.father_name || '',
+                        dob: selectedEmployee.dob || '',
+                        contact: selectedEmployee.contact || '',
+                        cnic: selectedEmployee.cnic || '',
+                        marital_status: selectedEmployee.marital_status || '',
+                        address: selectedEmployee.address || '',
+                        employee_id: selectedEmployee.employee_id || '',
+                        job_title: selectedEmployee.job_title || '',
+                        joining_date: selectedEmployee.joining_date || '',
+                        status: selectedEmployee.status || '',
+                        account_title: selectedEmployee.account_title || '',
+                        bank_name: selectedEmployee.bank_name || '',
+                        account_number: selectedEmployee.account_number || '',
+                        iban: selectedEmployee.iban || '',
+                        emergency_contact_name: selectedEmployee.emergency_contact_name || '',
+                        emergency_contact_number: selectedEmployee.emergency_contact_number || '',
+                        emergency_contact_relation: selectedEmployee.emergency_contact_relation || '',
+                        business_id: selectedEmployee.business_id || 1,
+
+                        // important
+                        photo: null,
+                        cnic_front: null,
+                        cnic_back: null,
+                    })
+
+                    // previews
+                    setPreview({
+                        photo: selectedEmployee.photo_url || null,
+                        cnic_front: selectedEmployee.cnic_front_url || null,
+                        cnic_back: selectedEmployee.cnic_back_url || null,
+                    })
+                }
+
+            }
+
+        } catch (error) {
+
+            console.log(error)
+            toast.error('Failed to fetch employee')
+
+        } finally {
+
+            setLoading(false)
+
+        }
+
+    }
+
     // input change
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -66,6 +147,7 @@ const Addemployee = () => {
     }
 
     // submit
+    // submit
     const handleSubmit = async () => {
 
         try {
@@ -76,61 +158,56 @@ const Addemployee = () => {
 
             Object.keys(formData).forEach((key) => {
 
-                // null values skip
+                // skip null/empty values
                 if (formData[key] !== null && formData[key] !== '') {
                     data.append(key, formData[key])
                 }
+
             })
 
-            const response = await api.post(
-                '/employee/store',
-                data,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+            let response
+
+            if (id) {
+
+                // UPDATE EMPLOYEE
+                response = await api.post(
+                    `/employee/update/${id}`,
+                    data,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
                     }
-                }
-            )
+                )
+
+                toast.success('Employee Updated Successfully')
+
+            } else {
+
+                // CREATE EMPLOYEE
+                response = await api.post(
+                    '/employee/store',
+                    data,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                )
+
+                toast.success('Employee Saved Successfully')
+
+            }
 
             console.log(response.data)
 
-            toast.success('Employee Saved Successfully')
-
-
-            // reset form
-            setFormData({
-                name: '',
-                father_name: '',
-                dob: '',
-                contact: '',
-                cnic: '',
-                marital_status: '',
-                address: '',
-                employee_id: '',
-                job_title: '',
-                joining_date: '',
-                status: '',
-                account_title: '',
-                bank_name: '',
-                account_number: '',
-                iban: '',
-                emergency_contact_name: '',
-                emergency_contact_number: '',
-                emergency_contact_relation: '',
-                business_id: 1,
-                photo: null,
-                cnic_front: null,
-                cnic_back: null,
-            })
+            navigate('/employee-list')
 
         } catch (error) {
 
             console.log(error)
 
-            // backend validation errors
             if (error.response?.status === 422) {
-
-                console.log(error.response.data)
 
                 const errors = error.response.data.errors
 
@@ -157,6 +234,7 @@ const Addemployee = () => {
             setLoading(false)
 
         }
+
     }
 
     return (
@@ -166,7 +244,7 @@ const Addemployee = () => {
                 {/* Heading */}
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">
-                        Add Employee
+                        {id ? 'Edit Employee' : 'Add Employee'}
                     </h1>
                     <p className="text-sm text-gray-500 mt-1">
                         Add new employee
@@ -626,7 +704,9 @@ const Addemployee = () => {
                         className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white transition-all"
                     >
                         {
-                            loading ? 'Saving...' : 'Save Employee'
+                            loading
+                                ? (id ? 'Updating...' : 'Saving...')
+                                : (id ? 'Update Employee' : 'Save Employee')
                         }
                     </button>
 

@@ -72,6 +72,7 @@ const Layout = () => {
               <Route path='/add-series' element={<Protectedroute><Series /></Protectedroute>} />
               <Route path='/add-models' element={<Protectedroute><ProductModle /></Protectedroute>} />
               <Route path='/add-products' element={<Protectedroute><AddProduct /></Protectedroute>} />
+              <Route path='/add-employee/:id' element={<Protectedroute><Addemployee /></Protectedroute>} />
               <Route path='/add-employee' element={<Protectedroute><Addemployee /></Protectedroute>} />
               <Route path='/employee-list' element={<Protectedroute><EmployeeList /></Protectedroute>} />
               <Route path='/employee/:id' element={<Protectedroute><EmployeeView /></Protectedroute>} />
