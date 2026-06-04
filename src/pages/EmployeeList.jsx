@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Search, Filter, Plus, Eye } from 'lucide-react'
+import { Search, Filter, Plus, Eye, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import api from '../api/api'
+import toast from 'react-hot-toast'
 
 const EmployeeList = () => {
 
@@ -31,6 +32,23 @@ const EmployeeList = () => {
 
             setLoading(false)
 
+        }
+    }
+
+    // delete employee
+    const deleteEmployee = async (id) => {
+
+        try {
+
+            await api.delete(`/employee/delete/${id}`)
+
+            toast.success('Employee deleted successfully')
+
+            fetchEmployees()
+
+        } catch (error) {
+            console.log(error)
+            toast.error('Failed to delete employee')
         }
     }
 
@@ -187,7 +205,7 @@ const EmployeeList = () => {
 
                                         {/* Designation */}
                                         <div className="text-sm text-[#475569] font-medium">
-                                            {employee.job_title}
+                                            {employee.job_title?.title}
                                         </div>
 
                                         {/* CNIC */}
@@ -214,7 +232,7 @@ const EmployeeList = () => {
                                         </div>
 
                                         {/* Action */}
-                                        <div className="flex items-center justify-center">
+                                        <div className="flex items-center justify-center gap-3">
 
                                             <button className="w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all">
 
@@ -224,7 +242,13 @@ const EmployeeList = () => {
                                                 >
                                                     <Eye className="w-5 h-5 text-[#64748B]" />
                                                 </Link>
+                                            </button>
 
+                                            <button
+                                                onClick={() => deleteEmployee(employee.id)}
+                                                className="cursor-pointer w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all"
+                                            >
+                                                <Trash2 className="w-5 h-5 text-[#64748B]" />
                                             </button>
 
                                         </div>

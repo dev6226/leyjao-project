@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function DataTable({ rows = [], columns = [] }) {
+export default function DataTable({ rows = [], columns = [], button }) {
     return (
         <div className="w-full mt-6 bg-[#FFFFFF] border border-[#E1E7EF] rounded-lg overflow-hidden">
             <div className="w-full overflow-x-auto">

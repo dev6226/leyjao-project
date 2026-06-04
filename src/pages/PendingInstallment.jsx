@@ -136,7 +136,7 @@ const PendingInstallment = () => {
                     <input
                         type="text"
                         placeholder="Search by Name, Phone, CNIC, Product"
-                        className='w-full h-11 pl-10 pr-4 rounded-lg border border-[#E1E7EF] bg-white outline-none shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] placeholder:text-[#65758B] placeholder:text-sm'
+                         onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='w-full h-11 pl-10 pr-4 rounded-lg border border-[#E1E7EF] bg-white outline-none shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] placeholder:text-[#65758B] placeholder:text-sm'
                     />
                 </div>
 

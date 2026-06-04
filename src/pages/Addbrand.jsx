@@ -140,7 +140,7 @@ const Addbrand = () => {
                                                         or
                                                     </p>
 
-                                                    <input type="file" ref={fileref} onChange={handleFileChange} accept='image/*' className='hidden' />
+                                                    <input type="file" ref={fileref} onChange={handleFileChange} accept='image/*'  onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className='hidden' />
 
                                                     <button onClick={handleButtonclick} className='w-[120px] sm:w-[135px] h-8 sm:h-9 text-sm 
                                                 bg-[#0062BD] text-white rounded-lg '>

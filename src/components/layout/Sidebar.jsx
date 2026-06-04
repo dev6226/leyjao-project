@@ -13,45 +13,43 @@ const navItems = [
     {
         label: 'Dashboard', icon: Dashboard, href: '/'
     },
+
+    // ── CUSTOMERS ──────────────────────────────
     { label: 'Add Customer', icon: Customer, href: '/add-customer' },
     { label: 'All Customer', icon: AllCustomer, href: '/all-Customer' },
     { label: 'Pending Installment', icon: Pending, href: '/pending-installments' },
     { label: 'Paid Installment', icon: Paid, href: '/paid-installments' },
+
+    // ── INVENTORY ──────────────────────────────
     {
         label: 'Inventory', icon: Inventory, href: '#', submenu: [
             { label: 'Add Product', href: '/add-products' },
-            { label: 'Inventory List', href: '#' },
-            { label: 'Add Brand', href: '/add-brand' },
-            { label: 'Add Category', href: '/add-category' },
-            { label: 'Add Series', href: '/add-series' },
-            { label: 'Add Models', href: '/add-models' },
-        ]
-    },
-    {
-        label: 'Products', icon: '/assets/logo10.png', submenu: [
-            { label: 'Add Vendor', href: '#' },
-            { label: 'Vendor List', href: '#' },
-            { label: 'Brand List', href: '/brand-list' },
-            { label: 'Category List', href: '/category-list' },
-            { label: 'Series List', href: '/series-list' },
-            { label: 'Models List', href: '/models-list' },
             { label: 'Products List', href: '/products-list' },
         ]
     },
-    { label: 'Vendors', icon: '/assets/logo5.png', href: '#' },
+
+    // ── CATALOGUE ──────────────────────────────
     {
-        label: 'Expenses', icon: Expense, submenu: [
-            { label: 'Expenses', href: '#' },
-            { label: 'Expense Heads', href: '#' },
+        label: 'Catalogue', icon: '/assets/logo10.png', submenu: [
+            { label: 'Add Brand', href: '/add-brand' },
+            { label: 'Brand List', href: '/brand-list' },
+            { label: 'Add Category', href: '/add-category' },
+            { label: 'Category List', href: '/category-list' },
+            { label: 'Add Series', href: '/add-series' },
+            { label: 'Series List', href: '/series-list' },
+            { label: 'Add Models', href: '/add-models' },
+            { label: 'Models List', href: '/models-list' },
         ]
     },
+
+    // ── EMPLOYEES ──────────────────────────────
     {
         label: 'Employees', icon: Employee, submenu: [
             { label: 'Add Employee', href: '/add-employee' },
             { label: 'Employee List', href: '/employee-list' },
+            { label: 'Job Titles', href: '/create-job-title' },
         ]
     },
-
 ]
 
 const NavItem = ({ item, collapsed }) => {

@@ -26,6 +26,8 @@ import Addemployee from './pages/Addemployee.jsx'
 import { Toaster } from 'react-hot-toast'
 import EmployeeList from './pages/EmployeeList.jsx'
 import EmployeeView from './pages/EmployeeView.jsx'
+import CreatejobTitle from './pages/CreatejobTitle.jsx'
+import Sellproducts from './pages/Sellproducts.jsx'
 
 
 
@@ -74,8 +76,10 @@ const Layout = () => {
               <Route path='/add-products' element={<Protectedroute><AddProduct /></Protectedroute>} />
               <Route path='/add-employee/:id' element={<Protectedroute><Addemployee /></Protectedroute>} />
               <Route path='/add-employee' element={<Protectedroute><Addemployee /></Protectedroute>} />
+              <Route path='/create-job-title' element={<Protectedroute><CreatejobTitle /></Protectedroute>} />
               <Route path='/employee-list' element={<Protectedroute><EmployeeList /></Protectedroute>} />
               <Route path='/employee/:id' element={<Protectedroute><EmployeeView /></Protectedroute>} />
+              <Route path='/sell-products/:id' element={<Protectedroute><Sellproducts /></Protectedroute>} />
             </Routes>
           </div>
         </>

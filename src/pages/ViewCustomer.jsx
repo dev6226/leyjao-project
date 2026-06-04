@@ -1,588 +1,651 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Tabs } from '@base-ui/react/tabs';
-import Printview from '../assets/preview-image.png'
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Tabs } from "@base-ui/react/tabs";
+import api from "../api/api";
+import {
+    User,
+    MapPin,
+    Phone,
+    Briefcase,
+    DollarSign,
+    Clock,
+    Home,
+    Building,
+    FileText,
+    Users,
+    ChevronLeft,
+    Eye,
+    X,
+    CreditCard,
+    Building2,
+    Lock,
+    Download,
+    ExternalLink,
+    ChevronRight,
+    ShieldCheck
+} from "lucide-react";
 
-
-const data = [
-    {
-        sr: "001",
-        date: "05/09/2026",
-        invoice: "000-000-1",
-        preBal: 150000,
-        install: 12500,
-        balance: 137500,
-        officer: "Arfan Ali",
-        remarks: "ABC",
-    },
-    {
-        sr: "002",
-        date: "05/10/2026",
-        invoice: "000-000-2",
-        preBal: 137500,
-        install: 12500,
-        balance: 125000,
-        officer: "Arfan Ali",
-        remarks: "ABC",
-    },
-    {
-        sr: "003",
-        date: "05/10/2026",
-        invoice: "000-000-2",
-        preBal: 137500,
-        install: 12500,
-        balance: 125000,
-        officer: "Arfan Ali",
-        remarks: "ABC",
-    },
-    {
-        sr: "004",
-        date: "05/10/2026",
-        invoice: "000-000-2",
-        preBal: 137500,
-        install: 12500,
-        balance: 125000,
-        officer: "Arfan Ali",
-        remarks: "ABC",
-    },
-];
-
-const PaymentTable = () => {
+const ViewCustomer = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
 
-    return (
-        <>
-            {/* Header */}
-            <div>
-                <h2 className="text-primary text-xl font-semibold">
-                    Customer View
-                </h2>
-                <p className="text-secondary text-base mt-1">
-                    Customer id : {id}
-                </p>
-            </div>
-            {/* main-container-table */}
-            <div className="bg-[#FFFFFF] h-auto w-full rounded-xl mt-3">
-                <div className="p-2 md:p-4">
-                    {/* progress */}
-                    <div className="p-2 mt-3 mb-3">
-                        <h2 className="text-lg font-semibold mb-4 text-primary">
-                            Payment Progress
-                        </h2>
+    const [customer, setCustomer] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [previewImage, setPreviewImage] = useState(null);
+    const [previewTitle, setPreviewTitle] = useState("");
 
-                        {/* Progress */}
-                        <div className="w-full bg-[#F3F5F7] rounded-full h-4">
-                            <div className="bg-[#0062BD] h-4 rounded-full w-[33%]"></div>
+    useEffect(() => {
+        const fetchCustomer = async () => {
+            try {
+                setLoading(true);
+                const res = await api.get(`/customer/${id}`);
+                const list = res.data?.data || [];
+                const found = list.find((c) => c.id === Number(id));
+                setCustomer(found || null);
+            } catch (error) {
+                console.error("Error fetching customer:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) fetchCustomer();
+    }, [id]);
+
+    const getImg = (url) => {
+        return url || "https://via.placeholder.com/200";
+    };
+
+    const handleImagePreview = (url, title) => {
+        if (url) {
+            setPreviewImage(url);
+            setPreviewTitle(title);
+        }
+    };
+
+    // Modern Skeleton Loading State
+    if (loading) {
+        return (
+            <div className="w-full max-w-7xl mx-auto space-y-6 p-4 animate-pulse">
+                {/* Header Back Button Skeleton */}
+                <div className="h-6 w-32 bg-gray-200 rounded"></div>
+
+                {/* Hero Card Skeleton */}
+                <div className="bg-white rounded-2xl border border-gray-150 overflow-hidden shadow-sm">
+                    <div className="h-28 bg-gradient-to-r from-blue-50 to-indigo-50"></div>
+                    <div className="p-6 relative flex flex-col md:flex-row gap-5 items-center">
+                        <div className="w-24 h-24 rounded-full bg-gray-200 border-4 border-white -mt-16 relative z-10"></div>
+                        <div className="flex-1 space-y-3 text-center md:text-left">
+                            <div className="h-6 w-48 bg-gray-200 rounded mx-auto md:mx-0"></div>
+                            <div className="h-4 w-32 bg-gray-200 rounded mx-auto md:mx-0"></div>
                         </div>
-
-                        <div className="flex flex-col md:flex-row justify-between text-base text-secondary mt-2 gap-2">
-                            <span>Paid : PKR 50,000</span>
-                            <span>Remaining : PKR 100000</span>
-                        </div>
-                    </div>
-                    {/* TABLE */}
-                    <div className="mt-6 w-full overflow-x-auto ">
-                        <table className="min-w-[1000px] w-full bg-[#FFFFFF] text-sm border border-gray-200 rounded-lg">
-
-                            {/* Head */}
-                            <thead className="bg-[#F9FAFB] text-[#65758B] text-base font-semibold text-left">
-                                <tr>
-                                    <th className="px-4 py-3">Sr#</th>
-                                    <th className="px-4 py-3">Date</th>
-                                    <th className="px-4 py-3">Invoice #</th>
-                                    <th className="px-4 py-3">Pre-Bal</th>
-                                    <th className="px-4 py-3">Install</th>
-                                    <th className="px-4 py-3">Balance</th>
-                                    <th className="px-4 py-3">Recovery Officer</th>
-                                    <th className="px-4 py-3">Remarks</th>
-                                </tr>
-                            </thead>
-
-                            {/* Body */}
-                            <tbody>
-                                {data.map((row, index) => (
-                                    <tr key={index} className="border-t border-[#E1E7EF] hover:bg-gray-50 text-sm text-[#4C4E53] font-medium">
-
-                                        <td className="px-4 py-3">{row.sr}</td>
-                                        <td className="px-4 py-3">{row.date}</td>
-                                        <td className="px-4 py-3">{row.invoice}</td>
-                                        <td className="px-4 py-3">{row.preBal}</td>
-                                        <td className="px-4 py-3">{row.install}</td>
-                                        <td className="px-4 py-3">{row.balance}</td>
-                                        <td className="px-4 py-3">{row.officer}</td>
-                                        <td className="px-4 py-3">{row.remarks}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-
-                        </table>
+                        <div className="h-10 w-28 bg-gray-200 rounded-lg"></div>
                     </div>
                 </div>
 
+                {/* Dashboard Grid Skeleton */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className="bg-white p-6 rounded-2xl border border-gray-150 h-80 space-y-4">
+                            <div className="h-5 w-40 bg-gray-200 rounded"></div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="h-12 bg-gray-100 rounded"></div>
+                                <div className="h-12 bg-gray-100 rounded"></div>
+                                <div className="h-12 bg-gray-100 rounded"></div>
+                                <div className="h-12 bg-gray-100 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-2xl border border-gray-150 h-80 space-y-4">
+                        <div className="h-5 w-40 bg-gray-200 rounded"></div>
+                        <div className="h-32 bg-gray-100 rounded"></div>
+                        <div className="h-20 bg-gray-100 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!customer) {
+        return (
+            <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-gray-150 rounded-2xl max-w-lg mx-auto mt-10 shadow-sm">
+                <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-4">
+                    <Users size={32} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-800">Customer Not Found</h3>
+                <p className="text-gray-500 text-sm mt-1">The customer you are looking for does not exist or has been removed.</p>
+                <button
+                    onClick={() => navigate("/all-Customer")}
+                    className="mt-6 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all shadow-sm shadow-blue-100"
+                >
+                    Back to Customer List
+                </button>
+            </div>
+        );
+    }
+
+    const cheque = customer?.cheque || {};
+
+    return (
+        <div className="w-full max-w-7xl mx-auto space-y-6 pb-12 px-2 sm:px-4 md:px-6">
+            {/* HEADER BREADCRUMB & BACK ACTION */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <button
+                    onClick={() => navigate("/all-Customer")}
+                    className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
+                >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm group-hover:border-blue-300 group-hover:bg-blue-50 transition-all">
+                        <ChevronLeft size={16} className="text-gray-600 group-hover:text-blue-600" />
+                    </div>
+                    <span>Back to All Customers</span>
+                </button>
+
+                {/* <div className="flex items-center gap-2 self-start sm:self-auto">
+                    <span className="text-xs text-gray-400 font-mono hidden md:inline">ID: {customer.id}</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider border ${customer.status === "Approved" || customer.status === "approved"
+                        ? "bg-green-50 text-green-700 border-green-200"
+                        : customer.status === "Rejected" || customer.status === "rejected"
+                            ? "bg-red-50 text-red-700 border-red-200"
+                            : "bg-amber-50 text-amber-700 border-amber-200"
+                        }`}>
+                        {customer.status || "Draft"}
+                    </span>
+                </div> */}
             </div>
 
+            {/* HERO HEADER CARD */}
+            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                {/* Banner with modern pattern/gradient */}
+                <div className="h-28 sm:h-36 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                </div>
 
-            {/* ✅ Tabs Added (Base UI) */}
-            <Tabs.Root className="mt-4" defaultValue="printView">
+                {/* Profile Overlay details */}
+                <div className="p-4 sm:p-6 relative flex flex-col md:flex-row gap-5 items-center md:items-end -mt-10 sm:-mt-12">
+                    {/* Avatar Container */}
+                    <div className="relative group">
+                        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white bg-gray-50 shadow-md relative z-10">
+                            <img
+                                src={getImg(customer.customer_photo_url)}
+                                alt={customer.full_name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.target.src = "https://via.placeholder.com/200?text=Customer";
+                                }}
+                            />
+                        </div>
+                        <button
+                            onClick={() => handleImagePreview(getImg(customer.customer_photo_url), "Customer Photo")}
+                            className="absolute inset-0 rounded-full bg-black/40 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white"
+                        >
+                            <Eye size={20} />
+                        </button>
+                    </div>
 
-                <Tabs.List className="flex gap-2 border-b mb-4 bg-gray-100 p-1 rounded-lg w-fit">
+                    {/* Customer Meta */}
+                    <div className="flex-1 text-center md:text-left space-y-1">
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex flex-col sm:flex-row items-center gap-2 justify-center md:justify-start">
+                            {customer.full_name}
+                            <span className="text-xs font-normal px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 font-mono">
+                                {customer.customer_number || "NO-CN"}
+                            </span>
+                        </h1>
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-sm text-gray-500">
+                            <span className="flex items-center gap-1.5">
+                                <Briefcase size={14} className="text-gray-400" />
+                                {customer.designation || "N/A"}
+                            </span>
+                            <span className="hidden sm:inline text-gray-300">•</span>
+                            <span className="flex items-center gap-1.5">
+                                <MapPin size={14} className="text-gray-400" />
+                                {customer.home_status === "owned" ? "Personal Home" : "Rental Home"}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            {/* TABS CONTAINER */}
+            <Tabs.Root defaultValue="overview" className="space-y-6">
+                <Tabs.List className="inline-flex p-1 bg-gray-100/80 backdrop-blur rounded-xl border border-gray-200">
                     <Tabs.Tab
-                        value="printView"
-                        className="px-4 py-2 rounded-md text-sm font-medium transition-all 
-        text-gray-600 hover:bg-white hover:text-blue-600 
-        data-[selected]:bg-white data-[selected]:text-blue-600 data-[selected]:shadow"
+                        value="overview"
+                        className="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 transition-all cursor-pointer
+              data-[selected]:bg-white data-[selected]:text-blue-600 data-[selected]:shadow-sm"
                     >
                         Overview
                     </Tabs.Tab>
-
                     <Tabs.Tab
-                        value="projects"
-                        className="px-4 py-2 rounded-md text-sm font-medium transition-all 
-        text-gray-600 hover:bg-white hover:text-blue-600 
-        data-[selected]:bg-white data-[selected]:text-blue-600 data-[selected]:shadow"
+                        value="detail"
+                        className="px-5 py-2 rounded-lg text-sm font-semibold text-gray-600 transition-all cursor-pointer
+              data-[selected]:bg-white data-[selected]:text-blue-600 data-[selected]:shadow-sm"
                     >
-                        Detail View
+                        Tabular View
                     </Tabs.Tab>
-
                 </Tabs.List>
 
-                {/* buttons */}
-                <div className=" flex justify-end items-center gap-3 ">
-                    <button className="flex items-center justify-center gap-x-2 bg-[#E6FAEE] rounded-xl h-11 w-28">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                            <path d="M14.905 4.54V3.372C14.9051 3.07055 14.8445 2.77217 14.727 2.49457C14.6095 2.21697 14.4375 1.96581 14.221 1.756L13.064 0.634C12.6442 0.227271 12.0825 -0.000108793 11.498 3.90503e-08H4.845C4.24826 3.90503e-08 3.67597 0.237053 3.25401 0.65901C2.83205 1.08097 2.595 1.65326 2.595 2.25V4.54H2.25C1.65326 4.54 1.08097 4.77705 0.65901 5.19901C0.237053 5.62097 0 6.19326 0 6.79V10.709C0 11.3057 0.237053 11.878 0.65901 12.3C1.08097 12.7219 1.65326 12.959 2.25 12.959H2.594V15.249C2.594 15.8457 2.83105 16.418 3.25301 16.84C3.46194 17.0489 3.70998 17.2147 3.98296 17.3277C4.25594 17.4408 4.54853 17.499 4.844 17.499H12.654C13.2507 17.499 13.823 17.2619 14.245 16.84C14.6669 16.418 14.904 15.8457 14.904 15.249V12.959H15.249C15.8457 12.959 16.418 12.7219 16.84 12.3C17.2619 11.878 17.499 11.3057 17.499 10.709V6.789C17.499 6.19226 17.2619 5.61997 16.84 5.19801C16.418 4.77605 15.8457 4.539 15.249 4.539L14.905 4.54ZM4.845 1.5H11.498C11.6928 1.49987 11.88 1.57555 12.02 1.711L13.177 2.833C13.2492 2.90297 13.3066 2.98675 13.3457 3.07934C13.3849 3.17194 13.4051 3.27146 13.405 3.372V4.539H4.095V2.249C4.095 2.05009 4.17402 1.85932 4.31467 1.71867C4.45532 1.57802 4.64609 1.5 4.845 1.5ZM2.594 10.694V11.458H2.25C2.05109 11.458 1.86032 11.379 1.71967 11.2383C1.57902 11.0977 1.5 10.9069 1.5 10.708V6.789C1.5 6.59009 1.57902 6.39932 1.71967 6.25867C1.86032 6.11802 2.05109 6.039 2.25 6.039H15.25C15.4489 6.039 15.6397 6.11802 15.7803 6.25867C15.921 6.39932 16 6.59009 16 6.789V10.708C16 10.9069 15.921 11.0977 15.7803 11.2383C15.6397 11.379 15.4489 11.458 15.25 11.458H14.904V10.694C14.904 10.4951 14.825 10.3043 14.6843 10.1637C14.5437 10.023 14.3529 9.944 14.154 9.944H3.344C3.14509 9.944 2.95432 10.023 2.81367 10.1637C2.67302 10.3043 2.594 10.4951 2.594 10.694ZM4.094 11.444H13.404V15.249C13.404 15.4479 13.325 15.6387 13.1843 15.7793C13.0437 15.92 12.8529 15.999 12.654 15.999H4.844C4.64509 15.999 4.45432 15.92 4.31367 15.7793C4.17302 15.6387 4.094 15.4479 4.094 15.249V11.444Z" fill="#00C950" />
-                        </svg>
-                        <p className="text-base font-medium text-[#00C950]">Print</p>
-                    </button>
-                    <button className="flex items-center justify-center gap-x-2 bg-[#2196F3] rounded-xl h-11 w-32">
+                {/* ================= OVERVIEW TAB ================= */}
+                <Tabs.Panel value="overview" className="outline-none space-y-6">
+                    {/* Main Info Columns */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                        <p className="text-base font-medium text-[#FFFFFF]">Download</p>
-                    </button>
-                </div>
+                        {/* COLUMN 1: Customer Details */}
+                        <div className="lg:col-span-2 space-y-6">
 
-                {/* 🔹 Overview Panel */}
-                <Tabs.Panel value="printView">
-                    <div className="p-3 md:p-6 bg-white rounded-xl border mt-6" >
-                        {/* print-view */}
-                        <div>
-                            <div>
-                                <img src={Printview} alt="Printview image" className="w-full" />
-                            </div>
-                        </div>
-
-                        {/* ✅ PRINT DATA UI */}
-                        <div className="mt-6 text-sm text-gray-700">
-                            {/* Top Row */}
-                            <div className="flex justify-between border-b pb-2 text-[#000000] text-sm md:text-base font-medium">
-                                <p>Print Date : 01-Jan-2025</p>
-                                <p>Form No : 1156155</p>
-                            </div>
-
-                            {/* Customer Info */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                                {/* Left */}
-                                <div className="space-y-1">
-                                    {[
-                                        { label: "Name :", value: "Danish Arshad" },
-                                        { label: "F/H Name :", value: "Arshad Bhatti" },
-                                        { label: "CNIC :", value: "35201-4108698-5" },
-                                        { label: "Phone No :", value: "03024425829" },
-                                        { label: "H. Address :", value: "DHA Phase 1 Block D, Street # 12, House # 452" },
-                                        { label: "Home Status :", value: "Permanent [ 20 Years ]" },
-                                        { label: "Occupation :", value: "Graphic Designer" },
-                                        { label: "Office Address :", value: "DHA Phase 1 Block D, Street # 12, House # 452" },
-                                    ].map((item, index) => (
-                                        <p key={index} className="flex text-sm md:text-base">
-                                            <span className="text-[#65758B] w-40 shrink-0">{item.label}</span>
-                                            <span className="text-[#000000] font-medium ">{item.value}</span>
-                                        </p>
-                                    ))}
-                                </div>
-
-                                {/* Middle */}
-                                <div className="space-y-1">
-                                    {[
-                                        { label: "Date :", value: "01-Jan-2026" },
-                                        { label: "Account No :", value: "2866533" },
-                                    ].map((item, index) => (
-                                        <p key={index} className="flex text-sm md:text-base">
-                                            <span className="text-[#65758B] w-40 shrink-0">{item.label}</span>
-                                            <span className="text-[#000000] font-medium">{item.value}</span>
-                                        </p>
-                                    ))}
-                                </div>
-
-                                {/* Right Images */}
-                                <div className="flex gap-3">
-                                    <div className="text-center">
-                                        <img src="https://via.placeholder.com/100" className="rounded w-24 h-24 object-cover" />
-                                        <p className="text-xs mt-1 text-[#65758B]">Customer Photo</p>
-                                    </div>
-                                    <div className="text-center">
-                                        <img src="https://via.placeholder.com/100" className="rounded w-24 h-24 object-cover" />
-                                        <p className="text-xs mt-1 text-[#65758B]">Cheque Person Photo</p>
+                            {/* Profile Card details */}
+                            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                                <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600">
+                                            <User size={18} />
+                                        </div>
+                                        <h3 className="font-bold text-gray-800">Personal Profile</h3>
                                     </div>
                                 </div>
 
+                                <div className="p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                                    {/* Grid fields */}
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Full Name</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.full_name || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Father's Name</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.father_name || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3 sm:pt-0">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">CNIC Number</p>
+                                        <p className="text-sm font-mono font-medium text-gray-800">{customer.cnic || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3 sm:pt-0">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Phone Number</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.phone || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3 sm:col-span-2">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Home Address</p>
+                                        <p className="text-sm font-medium text-gray-800 flex items-start gap-1">
+                                            <MapPin size={16} className="text-gray-400 shrink-0 mt-0.5" />
+                                            {customer.home_address || "-"}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Home Status</p>
+                                        <p className="text-sm font-medium text-gray-800 capitalize">{customer.home_status || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Time Period at Home</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.time_period || "-"}</p>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Product Info */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 border-t pt-4">
-
-                                {/* Left */}
-                                <div className="space-y-2">
-                                    {[
-                                        { label: "Company :", value: "Samsung" },
-                                        { label: "Product :", value: "Mobile" },
-                                        { label: "Model :", value: "s24 Ultra" },
-                                        { label: "Serial No :", value: "s564845651" },
-                                        { label: "Duration :", value: "12" },
-                                        { label: "Inst Receive :", value: "4" },
-                                        { label: "Inst Remaining :", value: "8" },
-                                        { label: "Status :", value: "Open" },
-                                    ].map((item, index) => (
-                                        <p key={index} className="flex text-sm md:text-base">
-                                            <span className="text-[#65758B] w-40 shrink-0">{item.label}</span>
-                                            <span className="text-[#000000] font-medium">{item.value}</span>
-                                        </p>
-                                    ))}
+                            {/* Work Information Card */}
+                            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                                <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600">
+                                            <Building size={18} />
+                                        </div>
+                                        <h3 className="font-bold text-gray-800">Employment Details</h3>
+                                    </div>
                                 </div>
 
-                                {/* Middle */}
-                                <div className="space-y-2 md:border-l md:pl-4 border-t md:border-t-0 pt-4 md:pt-0">
-                                    {[
-                                        { label: "Instal Price :", value: "150000" },
-                                        { label: "Act Installment :", value: "12500" },
-                                        { label: "Adv Receive :", value: "12500" },
-                                        { label: "Total Received :", value: "50000" },
-                                        { label: "Balance :", value: "100000" },
-                                    ].map((item, index) => (
-                                        <p key={index} className="flex text-sm md:text-base">
-                                            <span className="text-[#65758B] w-40 shrink-0">{item.label}</span>
-                                            <span className="text-[#000000] font-medium">{item.value}</span>
+                                <div className="p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Designation / Role</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.designation || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Monthly Salary</p>
+                                        <p className="text-sm font-semibold text-gray-900 flex items-center">
+                                            <DollarSign size={14} className="text-gray-400" />
+                                            {customer.salary ? Number(customer.salary).toLocaleString() : "-"}
                                         </p>
-                                    ))}
-                                </div>
-
-                                {/* Right */}
-                                <div className="space-y-2 md:border-l md:pl-4 border-t md:border-t-0 pt-4 md:pt-0">
-                                    {[
-                                        { label: "Data Operator :", value: "Irfan / 2853" },
-                                        { label: "Sale Person :", value: "Hassan Ali" },
-                                        { label: "Inquiry Person :", value: "Bilal" },
-                                        { label: "Chk Manager :", value: "Osama" },
-                                        { label: "App Manager :", value: "Afzal" },
-                                    ].map((item, index) => (
-                                        <p key={index} className="flex text-sm md:text-base">
-                                            <span className="text-[#65758B] w-40 shrink-0">{item.label}</span>
-                                            <span className="text-[#000000] font-medium">{item.value}</span>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3 sm:col-span-2">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Office Address</p>
+                                        <p className="text-sm font-medium text-gray-800 flex items-start gap-1">
+                                            <Building2 size={16} className="text-gray-400 shrink-0 mt-0.5" />
+                                            {customer.office_address || "-"}
                                         </p>
-                                    ))}
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Office Phone</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.office_phone || "-"}</p>
+                                    </div>
+                                    <div className="space-y-1 border-t border-gray-50 pt-3">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Time Period at Work</p>
+                                        <p className="text-sm font-medium text-gray-800">{customer.time_period || "-"}</p>
+                                    </div>
                                 </div>
-
-                            </div>
-
-                            {/* border */}
-                            <div className="mt-6 border-t pt-4"></div>
-
-                            {/* Guarantor Table */}
-                            <div className="mt-6 border border-gray-300 rounded overflow-hidden overflow-x-auto">
-                                <table className="w-full text-sm min-w-[500px]">
-                                    <thead>
-                                        <tr className="bg-[#D9D9D9] text-[#000000] text-sm md:text-base font-medium">
-                                            <th className="p-3 text-left font-medium border border-gray-300 w-[20%]">Criteria</th>
-                                            <th className="p-3 text-left font-medium border border-gray-300 w-[20%]">Guarantor 1</th>
-                                            <th className="p-3 text-left font-medium border border-gray-300 w-[20%]">Guarantor 2</th>
-                                            <th className="p-3 text-left font-medium border border-gray-300 w-[40%]">Guarantor 3</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {[
-                                            {
-                                                label: "Name :",
-                                                g1: "Danish Arshad",
-                                                g2: "Danish Arshad",
-                                                g3: "Danish Arshad",
-
-                                            },
-                                            {
-                                                label: "F/H Name :",
-                                                g1: "Arshad Bhatti",
-                                                g2: "Arshad Bhatti",
-                                                g3: "Arshad Bhatti",
-
-                                            },
-                                            {
-                                                label: "CNIC :",
-                                                g1: "35201-4108698-5",
-                                                g2: "35201-4108698-5",
-                                                g3: "35201-4108698-5",
-
-                                            },
-                                            {
-                                                label: "Phone No :",
-                                                g1: "03024425829",
-                                                g2: "03024425829",
-                                                g3: "03024425829",
-                                            },
-                                            {
-                                                label: "H. Address :",
-                                                g1: "DHA Phase 1 Block D, Street # 12, House # 452",
-                                                g2: "DHA Phase 1 Block D, Street # 12, House # 452",
-                                                g3: "DHA Phase 1 Block D, Street # 12, House # 452",
-                                            },
-                                            {
-                                                label: "Home Status :",
-                                                g1: "Permanent [ 20 Years ]",
-                                                g2: "Permanent [ 20 Years ]",
-                                                g3: "Permanent [ 20 Years ]",
-
-                                            },
-                                            {
-                                                label: "Occupation :",
-                                                g1: "Graphic Designer [10,0000]",
-                                                g2: "Graphic Designer [10,0000]",
-                                                g3: "Graphic Designer [10,0000]",
-
-                                            },
-                                            {
-                                                label: "Office Address :",
-                                                g1: "DHA Phase 1 Block D, Street # 12, House # 452",
-                                                g2: "DHA Phase 1 Block D, Street # 12, House # 452",
-                                                g3: "DHA Phase 1 Block D, Street # 12, House # 452",
-
-                                            },
-                                            {
-                                                label: "Relation :",
-                                                g1: "Neighbour",
-                                                g2: "Neighbour",
-                                                g3: "Neighbour",
-
-                                            },
-                                        ].map((row, index) => (
-                                            <tr key={index} className="border-t border-gray-300">
-                                                <td className="p-3 text-[#65758B] text-sm md:text-base border-r border-dashed border-gray-300 align-top whitespace-nowrap">
-                                                    {row.label}
-                                                </td>
-                                                <td className="p-3 text-[#0F1729] text-sm md:text-base font-medium border-r border-dashed border-gray-300 align-top">
-                                                    {row.g1}
-                                                </td>
-                                                <td className="p-3 text-[#0F1729] text-sm md:text-base font-medium align-top">
-                                                    {row.g2}
-                                                </td>
-                                                <td className="p-3 text-[#0F1729] text-sm md:text-base font-medium border-l border-dashed border-gray-300 align-top">
-                                                    {row.g3}
-                                                </td>
-
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {/* TABLE */}
-                            <div className="mt-6 w-full overflow-x-auto">
-                                <table className="min-w-[1000px] w-full bg-[#FFFFFF] text-sm border border-gray-200 rounded-lg">
-
-                                    {/* Head */}
-                                    <thead className="bg-[#F9FAFB] text-[#65758B] text-base font-semibold text-left">
-                                        <tr>
-                                            <th className="px-4 py-3">Sr#</th>
-                                            <th className="px-4 py-3">Date</th>
-                                            <th className="px-4 py-3">Invoice #</th>
-                                            <th className="px-4 py-3">Pre-Bal</th>
-                                            <th className="px-4 py-3">Install</th>
-                                            <th className="px-4 py-3">Balance</th>
-                                            <th className="px-4 py-3">Recovery Officer</th>
-                                            <th className="px-4 py-3">Remarks</th>
-                                        </tr>
-                                    </thead>
-
-                                    {/* Body */}
-                                    <tbody>
-                                        {data.map((row, index) => (
-                                            <tr key={index} className="border-t border-[#E1E7EF] hover:bg-gray-50 text-sm text-[#4C4E53] font-medium">
-
-                                                <td className="px-4 py-3">{row.sr}</td>
-                                                <td className="px-4 py-3">{row.date}</td>
-                                                <td className="px-4 py-3">{row.invoice}</td>
-                                                <td className="px-4 py-3">{row.preBal}</td>
-                                                <td className="px-4 py-3">{row.install}</td>
-                                                <td className="px-4 py-3">{row.balance}</td>
-                                                <td className="px-4 py-3">{row.officer}</td>
-                                                <td className="px-4 py-3">{row.remarks}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-
-                                </table>
                             </div>
 
                         </div>
-                    </div >
-                </Tabs.Panel >
 
-                {/* 🔹 Payment Panel (YOUR EXISTING CODE) */}
-                <Tabs.Panel value="projects">
-                    <div className="bg-gray-50 rounded-xl mt-6">
+                        {/* COLUMN 2: Cheque + Quick Verification Documents */}
+                        <div className="space-y-6">
 
-                        {/* Info Row helper */}
-                        {(() => {
-                            const InfoRow = ({ label, value }) => (
-                                <div className="flex justify-between items-start py-1 border-b border-dashed border-gray-100 last:border-0">
-                                    <span className="text-[#65758B] text-sm md:text-base w-44 shrink-0">{label}</span>
-                                    <span className="text-[#111827] text-sm md:text-base font-medium text-right">{value || "—"}</span>
-                                </div>
-                            );
+                            {/* Premium Banking Cheque Card styling */}
+                            <div className="relative overflow-hidden bg-gradient-to-br from-slate-850 via-slate-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md border border-slate-800 flex flex-col justify-between h-[230px]">
+                                <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl"></div>
+                                <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl"></div>
 
-                            const SectionHeader = ({ title }) => (
-                                <div className="flex items-center gap-2 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-[#CAE6FF] flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
-                                            <path d="M15.75 18.25C16.0152 18.25 16.2696 18.1446 16.4571 17.9571C16.6446 17.7696 16.75 17.5152 16.75 17.25V16.004C16.754 13.198 12.776 11 8.75 11C4.724 11 0.75 13.198 0.75 16.004V17.25C0.75 17.5152 0.855357 17.7696 1.04289 17.9571C1.23043 18.1446 1.48478 18.25 1.75 18.25H15.75ZM12.354 4.354C12.354 4.82728 12.2608 5.29593 12.0797 5.73319C11.8985 6.17045 11.6331 6.56775 11.2984 6.90241C10.9638 7.23707 10.5664 7.50254 10.1292 7.68366C9.69193 7.86478 9.22328 7.958 8.75 7.958C8.27672 7.958 7.80807 7.86478 7.37081 7.68366C6.93355 7.50254 6.53625 7.23707 6.20159 6.90241C5.86692 6.56775 5.60146 6.17045 5.42034 5.73319C5.23922 5.29593 5.146 4.82728 5.146 4.354C5.146 3.39816 5.52571 2.48147 6.20159 1.80559C6.87747 1.12971 7.79416 0.75 8.75 0.75C9.70584 0.75 10.6225 1.12971 11.2984 1.80559C11.9743 2.48147 12.354 3.39816 12.354 4.354Z" stroke="#0062BD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
+                                {/* Header */}
+                                <div className="flex justify-between items-start z-10">
+                                    <div className="space-y-0.5">
+                                        <p className="text-[10px] font-semibold text-indigo-300 uppercase tracking-widest">Cheque Details</p>
+                                        <p className="text-base font-bold tracking-wide">{cheque.bank_name || "N/A"}</p>
                                     </div>
-                                    <h2 className="text-[#0F1729] font-semibold text-lg">{title}</h2>
-                                </div>
-                            );
-
-                            const PhotoBox = ({ label }) => (
-                                <div className="flex flex-col items-center gap-1">
-                                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 border border-gray-200 rounded flex items-center justify-center overflow-hidden">
-                                        <img src="https://via.placeholder.com/80" alt={label} className="w-full h-full object-cover" />
+                                    <div className="h-8 w-11 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm border border-white/10 text-white/80">
+                                        <CreditCard size={18} />
                                     </div>
-                                    <span className="text-sm sm:text-base text-[#65758B] text-center leading-tight">{label}</span>
                                 </div>
-                            );
 
-                            return (
-                                <div className="max-w-7xl mx-auto space-y-4">
+                                {/* Card Number */}
+                                <div className="space-y-1 z-10 my-4">
+                                    <p className="text-[9px] text-slate-400 uppercase tracking-widest">Account / Cheque Number</p>
+                                    <p className="text-lg font-mono font-bold tracking-widest text-slate-100">
+                                        {cheque.account_number ? cheque.account_number.match(/.{1,4}/g)?.join(" ") : "•••• •••• •••• ••••"}
+                                    </p>
+                                </div>
 
-                                    {/* Row 1: Customer Info + Product Info */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                {/* Footer details */}
+                                <div className="flex justify-between items-end z-10">
+                                    <div className="space-y-0.5">
+                                        <p className="text-[9px] text-slate-400 uppercase tracking-wider">Account Holder</p>
+                                        <p className="text-xs font-semibold tracking-wide text-slate-200 uppercase">{cheque.cheque_person_name || "N/A"}</p>
+                                    </div>
+                                    {cheque.cnic && (
+                                        <div className="text-right">
+                                            <p className="text-[9px] text-slate-400 uppercase">Holder CNIC</p>
+                                            <p className="text-[11px] font-mono font-medium text-slate-300">{cheque.cnic}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
 
-                                        {/* Customer Information */}
-                                        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-sm">
-                                            <SectionHeader title="Customer Information" />
-                                            <InfoRow label="Full Name" value="Danish Arshad" />
-                                            <InfoRow label="CNIC" value="35201-4108698-5" />
-                                            <InfoRow label="Phone Number" value="0302-4425829" />
-                                            <InfoRow label="Home Address" value="Dha Phase 1 Block D" />
-                                            <InfoRow label="Home Status" value="Permanent" />
-                                            <InfoRow label="Time Period" value="[ 20 Years ]" />
-                                            <InfoRow label="Office Address" value="Dha Phase 1 Block D" />
-                                            <InfoRow label="Designation" value="Graphic Designer" />
-                                            <InfoRow label="Time Period" value="[ 2 Years ]" />
-                                            <InfoRow label="Salary" value="10,000" />
-                                            <InfoRow label="Phone Number" value="Nill" />
-                                            <div className="mt-4 pt-3 border-t border-gray-100">
-                                                <div className="flex gap-3 flex-wrap">
-                                                    <PhotoBox label="Customer Photo" />
-                                                    <PhotoBox label="CNIC Front" />
-                                                    <PhotoBox label="CNIC Back" />
-                                                    <PhotoBox label="Cheque Photo" />
+                            {/* Uploaded Documents Quick Panel */}
+                            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                                <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1.5 rounded-lg bg-teal-50 text-teal-600">
+                                            <ShieldCheck size={18} />
+                                        </div>
+                                        <h3 className="font-bold text-gray-800">Verification Files</h3>
+                                    </div>
+                                </div>
+
+                                <div className="p-5 space-y-4">
+                                    {/* Photo row items */}
+                                    {[
+                                        { label: "Customer Photo", url: customer.customer_photo_url, key: "photo" },
+                                        { label: "CNIC Card Front", url: customer.cnic_front_url, key: "cnic_f" },
+                                        { label: "CNIC Card Back", url: customer.cnic_back_url, key: "cnic_b" },
+                                        { label: "Account Cheque Front", url: cheque.cheque_front_url, key: "cheq_f" },
+                                        { label: "Account Cheque Back", url: cheque.cheque_back_url, key: "cheq_b" }
+                                    ].map((doc, idx) => (
+                                        <div
+                                            key={doc.key + idx}
+                                            onClick={() => handleImagePreview(getImg(doc.url), doc.label)}
+                                            className="group flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-blue-100 hover:bg-blue-50/20 transition-all cursor-pointer"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex-shrink-0 group-hover:scale-105 transition-transform">
+                                                    <img src={getImg(doc.url)} alt={doc.label} className="w-full h-full object-cover" />
+                                                </div>
+                                                <div className="text-left">
+                                                    <p className="text-sm font-semibold text-gray-700 group-hover:text-blue-700 transition-colors">{doc.label}</p>
+                                                    <p className="text-xs text-gray-400">{doc.url ? "Verified Document" : "Placeholder Used"}</p>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        {/* Product Information */}
-                                        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-sm">
-                                            <SectionHeader title="Product Information" />
-                                            <InfoRow label="Company" value="Samsung" />
-                                            <InfoRow label="Product" value="Mobile" />
-                                            <InfoRow label="Model" value="s24 Ultra" />
-                                            <InfoRow label="Serial No" value="s5556585065" />
-                                            <InfoRow label="Duration" value="12" />
-                                            <InfoRow label="Total Installment Receive" value="4" />
-                                            <InfoRow label="Total Price" value="150050" />
-                                            <InfoRow label="Actual Installment" value="12950" />
-                                            <InfoRow label="Advance Receive" value="12950" />
-                                            <InfoRow label="Total Receive" value="50000" />
-                                            <InfoRow label="Balance" value="10,000" />
-                                            <div className="mt-4 pt-3 border-t border-gray-100">
-                                                <div className="flex gap-3 flex-wrap">
-                                                    <PhotoBox label="Product Photo" />
-                                                </div>
+                                            <div className="h-7 w-7 rounded-lg bg-gray-50 group-hover:bg-blue-100/50 flex items-center justify-center text-gray-400 group-hover:text-blue-600 transition-colors">
+                                                <Eye size={14} />
                                             </div>
                                         </div>
-                                    </div>
-
-                                    {/* Row 2: Guarantor 1 + Guarantor 2 */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-                                        {/* Guarantor 1 */}
-                                        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-sm">
-                                            <SectionHeader title="Guarantor 1" />
-                                            <InfoRow label="Full Name" value="Danish Arshad" />
-                                            <InfoRow label="CNIC" value="35201-4108698-5" />
-                                            <InfoRow label="Phone Number" value="0302-4425829" />
-                                            <InfoRow label="Home Address" value="Dha Phase 1 Block D" />
-                                            <InfoRow label="Home Status" value="Permanent" />
-                                            <InfoRow label="Time Period" value="[ 20 Years ]" />
-                                            <InfoRow label="Office Address" value="Dha Phase 1 Block D" />
-                                            <InfoRow label="Designation" value="Graphic Designer" />
-                                            <InfoRow label="Time Period" value="[ 2 Years ]" />
-                                            <InfoRow label="Salary" value="10,000" />
-                                            <InfoRow label="Phone Number" value="Nill" />
-                                            <div className="mt-4 pt-3 border-t border-gray-100">
-                                                <div className="flex gap-3 flex-wrap">
-                                                    <PhotoBox label="CNIC Front" />
-                                                    <PhotoBox label="CNIC Back" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Guarantor 2 */}
-                                        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-sm">
-                                            <SectionHeader title="Guarantor 2" />
-                                            <InfoRow label="Full Name" value="Danish Arshad" />
-                                            <InfoRow label="CNIC" value="35201-4108698-5" />
-                                            <InfoRow label="Phone Number" value="0302-4425829" />
-                                            <InfoRow label="Home Address" value="Dha Phase 1 Block D" />
-                                            <InfoRow label="Home Status" value="Permanent" />
-                                            <InfoRow label="Time Period" value="[ 20 Years ]" />
-                                            <InfoRow label="Office Address" value="Dha Phase 1 Block D" />
-                                            <InfoRow label="Designation" value="Graphic Designer" />
-                                            <InfoRow label="Time Period" value="[ 2 Years ]" />
-                                            <InfoRow label="Salary" value="10,000" />
-                                            <InfoRow label="Phone Number" value="Nill" />
-                                            <div className="mt-4 pt-3 border-t border-gray-100">
-                                                <div className="flex gap-3 flex-wrap">
-                                                    <PhotoBox label="CNIC Front" />
-                                                    <PhotoBox label="CNIC Back" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Row 3: Cheque Detail */}
-                                    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-sm w-auto lg:max-w-[547px]">
-                                        <SectionHeader title="Cheque Detail" />
-                                        <div className="max-w-sm">
-                                            <InfoRow label="Bank" value="Meezan Bank" />
-                                            <InfoRow label="Cheque Number" value="0214589638755" />
-                                            <InfoRow label="Cheque Person Name" value="Danish Arshad" />
-                                            <InfoRow label="CNIC" value="35201-4108698-5" />
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-gray-100">
-                                            <div className="flex gap-3 flex-wrap">
-                                                <PhotoBox label="Product Photo" />
-                                                <PhotoBox label="Cheque Photo" />
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    ))}
                                 </div>
-                            );
-                        })()}
+                            </div>
+
+                        </div>
 
                     </div>
+
+                    {/* DYNAMIC GUARANTORS LIST SECTION */}
+                    <div className="space-y-4 mt-2">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 rounded-lg bg-purple-50 text-purple-600">
+                                <Users size={18} />
+                            </div>
+                            <h2 className="text-lg font-bold text-gray-800">Guarantors Information</h2>
+                            <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-700">
+                                {customer.guarantors?.length || 0}
+                            </span>
+                        </div>
+
+                        {customer.guarantors && customer.guarantors.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {customer.guarantors.map((g, i) => (
+                                    <div key={g.id || i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between">
+                                        <div>
+                                            {/* Top banner of Guarantor card */}
+                                            <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                                                <span className="text-xs font-bold text-purple-700 bg-purple-50 border border-purple-100 px-2.5 py-0.5 rounded-full">
+                                                    Guarantor {i + 1}
+                                                </span>
+                                            </div>
+
+                                            {/* Content details */}
+                                            <div className="p-5 space-y-3.5">
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div>
+                                                        <p className="text-[10px] font-bold text-gray-400 uppercase">Full Name</p>
+                                                        <p className="text-sm font-semibold text-gray-800">{g.full_name || "-"}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[10px] font-bold text-gray-400 uppercase">CNIC</p>
+                                                        <p className="text-sm font-mono font-medium text-gray-800">{g.cnic || "-"}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[10px] font-bold text-gray-400 uppercase">Phone Number</p>
+                                                        <p className="text-sm font-semibold text-gray-800">{g.phone || "-"}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[10px] font-bold text-gray-400 uppercase">Designation</p>
+                                                        <p className="text-sm font-semibold text-gray-800">{g.designation || "-"}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="border-t border-gray-100 pt-3">
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Home Address</p>
+                                                    <p className="text-sm font-medium text-gray-700 flex items-start gap-1 mt-0.5">
+                                                        <MapPin size={15} className="text-gray-400 shrink-0 mt-0.5" />
+                                                        {g.home_address || "-"}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Guarantor Document previews */}
+                                        <div className="p-5 border-t border-gray-100 bg-gray-50/30 grid grid-cols-2 gap-3">
+                                            <div
+                                                onClick={() => handleImagePreview(getImg(g.cnic_front_url), `Guarantor ${i + 1} CNIC Front`)}
+                                                className="group relative h-20 border border-gray-200 rounded-xl overflow-hidden cursor-pointer shadow-xs bg-white hover:border-blue-300 transition-colors"
+                                            >
+                                                <img src={getImg(g.cnic_front_url)} className="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="CNIC Front" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs gap-1">
+                                                    <Eye size={12} /> View Front
+                                                </div>
+                                            </div>
+                                            <div
+                                                onClick={() => handleImagePreview(getImg(g.cnic_back_url), `Guarantor ${i + 1} CNIC Back`)}
+                                                className="group relative h-20 border border-gray-200 rounded-xl overflow-hidden cursor-pointer shadow-xs bg-white hover:border-blue-300 transition-colors"
+                                            >
+                                                <img src={getImg(g.cnic_back_url)} className="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="CNIC Back" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs gap-1">
+                                                    <Eye size={12} /> View Back
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="bg-white p-8 text-center rounded-2xl border border-gray-250/60 shadow-sm text-gray-500">
+                                No guarantors registered for this customer profile.
+                            </div>
+                        )}
+                    </div>
                 </Tabs.Panel>
-            </Tabs.Root >
-        </>
+
+                {/* ================= TABULAR DETAILS VIEW ================= */}
+                <Tabs.Panel value="detail" className="outline-none">
+                    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                        <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                            <h3 className="font-bold text-gray-800">Complete Tabular Database View</h3>
+                            <span className="text-xs text-gray-400">Structured system properties</span>
+                        </div>
+
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-sm border-collapse">
+                                <thead>
+                                    <tr className="bg-gray-50 text-gray-400 uppercase tracking-wider text-[11px] font-semibold border-b border-gray-100">
+                                        <th className="py-3 px-6">Section</th>
+                                        <th className="py-3 px-6">Database Key</th>
+                                        <th className="py-3 px-6">Current Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100 text-gray-700">
+                                    {/* General */}
+                                    <tr>
+                                        <td className="py-3 px-6 font-bold text-gray-900 bg-gray-50/20" rowSpan="6">General Info</td>
+                                        <td className="py-3 px-6 font-mono text-xs text-gray-500">full_name</td>
+                                        <td className="py-3 px-6">{customer.full_name || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-gray-500">father_name</td>
+                                        <td className="py-3 px-6">{customer.father_name || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-gray-500">cnic</td>
+                                        <td className="py-3 px-6 font-mono">{customer.cnic || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-gray-500">phone</td>
+                                        <td className="py-3 px-6">{customer.phone || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-gray-500">home_address</td>
+                                        <td className="py-3 px-6">{customer.home_address || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-gray-500">home_status</td>
+                                        <td className="py-3 px-6 capitalize">{customer.home_status || "-"}</td>
+                                    </tr>
+
+                                    {/* Professional */}
+                                    <tr className="border-t-2 border-gray-100">
+                                        <td className="py-3 px-6 font-bold text-indigo-900 bg-indigo-50/5" rowSpan="5">Work Details</td>
+                                        <td className="py-3 px-6 font-mono text-xs text-indigo-500">designation</td>
+                                        <td className="py-3 px-6 font-medium">{customer.designation || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-indigo-500">salary</td>
+                                        <td className="py-3 px-6 font-semibold">{customer.salary || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-indigo-500">office_address</td>
+                                        <td className="py-3 px-6">{customer.office_address || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-indigo-500">office_phone</td>
+                                        <td className="py-3 px-6">{customer.office_phone || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-indigo-500">time_period</td>
+                                        <td className="py-3 px-6">{customer.time_period || "-"}</td>
+                                    </tr>
+
+                                    {/* Cheque */}
+                                    <tr className="border-t-2 border-gray-100">
+                                        <td className="py-3 px-6 font-bold text-teal-900 bg-teal-50/5" rowSpan="4">Cheque Details</td>
+                                        <td className="py-3 px-6 font-mono text-xs text-teal-500">bank_name</td>
+                                        <td className="py-3 px-6">{cheque.bank_name || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-teal-500">account_number</td>
+                                        <td className="py-3 px-6 font-mono">{cheque.account_number || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-teal-500">cheque_person_name</td>
+                                        <td className="py-3 px-6">{cheque.cheque_person_name || "-"}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-3 px-6 font-mono text-xs text-teal-500">cheque_cnic</td>
+                                        <td className="py-3 px-6 font-mono">{cheque.cnic || "-"}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </Tabs.Panel>
+            </Tabs.Root>
+
+            {/* ================= LIGHTBOX MODAL OVERLAY ================= */}
+            {previewImage && (
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in transition-all">
+
+                    {/* Header Action Row */}
+                    <div className="w-full max-w-4xl flex items-center justify-between mb-3 text-white">
+                        <span className="text-sm font-semibold tracking-wide bg-white/10 px-3.5 py-1 rounded-full backdrop-blur">
+                            {previewTitle}
+                        </span>
+                        <div className="flex items-center gap-3">
+                            <a
+                                href={previewImage}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur"
+                                title="View Fullscreen"
+                            >
+                                <ExternalLink size={16} />
+                            </a>
+                            <button
+                                onClick={() => {
+                                    setPreviewImage(null);
+                                    setPreviewTitle("");
+                                }}
+                                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 hover:bg-red-600 text-white transition-all backdrop-blur cursor-pointer"
+                                title="Close"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Large Image Frame */}
+                    <div className="relative w-full max-w-4xl max-h-[75vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-slate-900/50">
+                        <img
+                            src={previewImage}
+                            alt="Verification Preview"
+                            className="max-w-full max-h-[75vh] object-contain select-none"
+                        />
+                    </div>
+
+                    {/* Bottom dismiss trigger */}
+                    <button
+                        onClick={() => {
+                            setPreviewImage(null);
+                            setPreviewTitle("");
+                        }}
+                        className="mt-6 px-6 py-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white text-xs font-semibold rounded-full tracking-wider transition-all backdrop-blur cursor-pointer"
+                    >
+                        DISMISS VIEWER
+                    </button>
+                </div>
+            )}
+        </div>
     );
 };
 
-export default PaymentTable;
+export default ViewCustomer;

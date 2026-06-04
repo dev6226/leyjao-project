@@ -322,7 +322,7 @@ const AddProduct = () => {
                                         <input
                                             type="file"
                                             accept="image/*"
-                                            className="hidden"
+                                            onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className="hidden"
                                             id="upload-logo"
                                             onChange={handleImageChange}
                                         />
@@ -349,9 +349,6 @@ const AddProduct = () => {
             <div className='flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-3 sm:gap-4 mt-3 w-full'>
                 <button className='bg-[#FFFFFF] h-11 w-full sm:w-[100px] shadow-[0px_6px_12.52px_0px_rgba(208,210,218,0.7)] rounded-xl text-[#313B54] font-medium border border-[#ECEFF5] cursor-pointer'>
                     Cancel
-                </button>
-                <button className='bg-[#FFFFFF] h-11 w-full sm:w-[100px] shadow-[0px_6px_12.52px_0px_rgba(208,210,218,0.7)] rounded-xl text-[#313B54] font-medium border border-[#ECEFF5] cursor-pointer'>
-                    Save Draft
                 </button>
                 <button
                     onClick={creatProduct}

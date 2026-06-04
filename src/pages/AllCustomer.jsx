@@ -1,77 +1,53 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from '../components/table/DataTable.jsx'
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
+import api from '../api/api';
 
 const AllCustomer = () => {
   const navigate = useNavigate();
-  const rows = [
-    {
-      id: 1,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Muhammad Umar",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-    {
-      id: 2,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Danish Ali",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-    {
-      id: 3,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Muhammad Bilal",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-    {
-      id: 4,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Lassan Adrak",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-    {
-      id: 5,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Lassan Adrak",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-    {
-      id: 6,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Lassan Adrak",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-    {
-      id: 7,
-      date: "10 Dec, 2025",
-      cn: "000-001",
-      name: "Lassan Adrak",
-      phone: "03024425829",
-      cnic: "35201-4108698-5",
-      status: "Draft",
-    },
-  ];
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/customer');
+        const data = response.data.data || response.data;
+
+        const mapped = data.map((customer) => ({
+          id: customer.id,
+          date: customer.created_at
+            ? new Date(customer.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+            : '-',
+          cn: customer.cn || customer.customer_number || '-',
+          name: customer.full_name || '-',
+          phone: customer.phone || '-',
+          cnic: customer.cnic || '-',
+          status: customer.status || 'Draft',
+        }));
+
+        setRows(mapped);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+  const button = (row) => (
+    <button
+      onClick={() => navigate(`/sell-products/${row.id}`)}
+      className="px-4 py-1.5 bg-[#0062BD] hover:bg-[#0054A3] text-white text-xs font-semibold rounded-lg transition-all shadow-sm"
+    >
+      Sell
+    </button>
+  );
 
   const columns = [
     { key: 'date', label: 'Date' },
@@ -89,22 +65,27 @@ const AllCustomer = () => {
     },
 
     {
-      key: 'edit', label: 'Edit',
-      render: (row) => (
-        <button onClick={() => navigate(`/edit-customer/${row.id}`)}>
-          <EditIcon fontSize="small" />
-        </button>
-      )
-    },
-    {
       key: 'action', label: 'Action',
       render: (row) => (
-        <button onClick={() => navigate(`/view-customer/${row.id}`)}>
-          <VisibilityIcon fontSize="small" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(`/view-customer/${row.id}`)}
+            className="p-1 hover:bg-gray-100 rounded transition"
+            title="View Details"
+          >
+            <VisibilityIcon fontSize="small" className="text-gray-500 hover:text-[#0062BD]" />
+          </button>
+          <button
+            onClick={() => navigate(`/sell-products/${row.id}`)}
+            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded transition"
+          >
+            Sell
+          </button>
+        </div>
       )
     },
   ];
+
   return (
     <div>
       {/* Header */}
@@ -119,22 +100,14 @@ const AllCustomer = () => {
 
       {/* Search + Filter */}
       <div className='flex flex-col md:flex-row justify-between gap-3 mt-6'>
-        {/* Search Input with Icon */}
         <div className='relative w-full md:w-[552px]'>
-
-          {/* SVG Icon */}
           <div className='absolute left-3 top-1/2 -translate-y-1/2'>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
               <path d="M14.75 14.75L11.3721 11.3721M11.3721 11.3721C11.9499 10.7944 12.4083 10.1084 12.721 9.35349C13.0337 8.59856 13.1946 7.78944 13.1946 6.97231C13.1946 6.15519 13.0337 5.34606 12.721 4.59114C12.4083 3.83621 11.9499 3.15027 11.3721 2.57247C10.7944 1.99468 10.1084 1.53635 9.35349 1.22365C8.59856 0.910945 7.78944 0.75 6.97231 0.75C6.15519 0.75 5.34606 0.910945 4.59114 1.22365C3.83621 1.53635 3.15027 1.99468 2.57247 2.57247C1.40556 3.73938 0.75 5.32205 0.75 6.97231C0.75 8.62257 1.40556 10.2052 2.57247 11.3721C3.73938 12.5391 5.32205 13.1946 6.97231 13.1946C8.62257 13.1946 10.2052 12.5391 11.3721 11.3721Z"
-                stroke="#65758B"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke="#65758B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
               />
             </svg>
           </div>
-
-          {/* Input */}
           <input
             type="text"
             placeholder="Search by Name, Phone, CNIC, Product"
@@ -142,21 +115,22 @@ const AllCustomer = () => {
           />
         </div>
 
-        {/* Filter Button */}
-        <button className='flex items-center gap-2 px-4 h-11 rounded-xl border border-[#E1E7EF] bg-[#FFFFFF] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] text-[#64748B]'
-        >
+        <button className='flex items-center gap-2 px-4 h-11 rounded-xl border border-[#E1E7EF] bg-[#FFFFFF] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] text-[#64748B]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="12" viewBox="0 0 11 12" fill="none">
-            <path d="M0.5 0.5H9.83333L6.5 4.83333V11.1667L3.83333 8.5V4.83333L0.5 0.5Z" stroke="#64748B" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M0.5 0.5H9.83333L6.5 4.83333V11.1667L3.83333 8.5V4.83333L0.5 0.5Z" stroke="#64748B" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           Filter
         </button>
-
       </div>
-      {/* data-table */}
+
+      {/* Data Table */}
       <div className='mt-4'>
-        <DataTable rows={rows} columns={columns} />
+        {loading ? (
+          <p className='text-center text-sm text-gray-400 py-10'>Loading...</p>
+        ) : (
+          <DataTable rows={rows} columns={columns} button={button} />
+        )}
       </div>
-
 
       {/* Footer */}
       <div className='mt-6 text-xs text-gray-400 flex flex-col md:flex-row justify-between gap-2'>
@@ -167,7 +141,6 @@ const AllCustomer = () => {
           <p>Contact</p>
         </div>
       </div>
-
     </div>
   )
 }
