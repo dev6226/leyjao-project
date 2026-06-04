@@ -28,6 +28,7 @@ import EmployeeList from './pages/EmployeeList.jsx'
 import EmployeeView from './pages/EmployeeView.jsx'
 import CreatejobTitle from './pages/CreatejobTitle.jsx'
 import Sellproducts from './pages/Sellproducts.jsx'
+import Payinstallment from './pages/Payinstallment.jsx'
 
 
 
@@ -80,6 +81,7 @@ const Layout = () => {
               <Route path='/employee-list' element={<Protectedroute><EmployeeList /></Protectedroute>} />
               <Route path='/employee/:id' element={<Protectedroute><EmployeeView /></Protectedroute>} />
               <Route path='/sell-products/:id' element={<Protectedroute><Sellproducts /></Protectedroute>} />
+              <Route path="/pay-installment" element={<Payinstallment />} />
             </Routes>
           </div>
         </>

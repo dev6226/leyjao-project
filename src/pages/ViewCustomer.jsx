@@ -298,7 +298,6 @@ const ViewCustomer = () => {
                                     <div className="space-y-1">
                                         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Monthly Salary</p>
                                         <p className="text-sm font-semibold text-gray-900 flex items-center">
-                                            <DollarSign size={14} className="text-gray-400" />
                                             {customer.salary ? Number(customer.salary).toLocaleString() : "-"}
                                         </p>
                                     </div>

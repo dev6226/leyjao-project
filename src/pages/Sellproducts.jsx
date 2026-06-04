@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../api/api'
 import toast from 'react-hot-toast'
-import { User, Phone, CreditCard, ChevronLeft } from 'lucide-react'
+import { User, Phone, CreditCard, ChevronLeft, Loader2 } from 'lucide-react'
 
 const Sellproducts = () => {
     const { id } = useParams()
@@ -11,6 +10,7 @@ const Sellproducts = () => {
 
     const [customer, setCustomer] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [submitLoading, setSubmitLoading] = useState(false)
     const [type, setType] = useState("")
     const [products, setProducts] = useState([])
     const [series, setSeries] = useState([])
@@ -20,13 +20,15 @@ const Sellproducts = () => {
     const [selectedModel, setSelectedModel] = useState("")
     const [selectedSeries, setSelectedSeries] = useState("")
     const [selectedBrand, setSelectedBrand] = useState("");
+    const [duration, setDuration] = useState("");
 
-    // ── New State for Actual Selling Price ──
+    // ── Price & Calculation States ──
     const [actualSellingPrice, setActualSellingPrice] = useState("");
+    const [advanceAmount, setAdvanceAmount] = useState("");
+    const [markupPercent, setMarkupPercent] = useState("");
 
-    // ── Webcam & Upload States ──
-    const [productImage, setProductImage] = useState(null)
-    const [productImageFile, setProductImageFile] = useState(null)
+    // ── Webcam & Upload States (Cleaned Base64) ──
+    const [productImageFile, setProductImageFile] = useState(null) // Holds both device files and webcam blobs
     const [cameraActive, setCameraActive] = useState(false)
     const [facingMode, setFacingMode] = useState("environment")
 
@@ -61,7 +63,7 @@ const Sellproducts = () => {
         setCameraActive(false)
     }
 
-    // Capture photo from video
+    // Capture photo from video and convert directly to File Object
     const capturePhoto = () => {
         if (videoRef.current) {
             const canvas = document.createElement("canvas")
@@ -70,15 +72,15 @@ const Sellproducts = () => {
             const ctx = canvas.getContext("2d")
             ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height)
 
+            // Convert canvas to real File Object instead of Base64
             canvas.toBlob((blob) => {
                 if (blob) {
-                    const file = new File([blob], "captured_proof.jpg", { type: "image/jpeg" })
-                    setProductImageFile(file)
-                    setProductImage(URL.createObjectURL(blob))
-                    stopCamera()
-                    toast.success("Photo captured successfully!")
+                    const file = new File([blob], `webcam_capture_${Date.now()}.jpg`, { type: blob.type || "image/jpeg" });
+                    setProductImageFile(file); // Stores as standard file input
+                    stopCamera();
+                    toast.success("Live photo captured successfully!");
                 }
-            }, "image/jpeg", 0.95)
+            }, "image/jpeg", 0.95);
         }
     }
 
@@ -92,9 +94,8 @@ const Sellproducts = () => {
     const handleFileUpload = (e) => {
         const file = e.target.files[0]
         if (file) {
-            setProductImageFile(file)
-            setProductImage(URL.createObjectURL(file))
-            toast.success("Image uploaded successfully!")
+            setProductImageFile(file); // Stores any image format uploaded by user
+            toast.success("Image uploaded from device successfully!")
         }
     }
 
@@ -177,7 +178,6 @@ const Sellproducts = () => {
     const fetchBrands = async () => {
         try {
             const res = await api.get("/brand")
-            console.log(res.data.data)
             setBrands(res.data.data)
         } catch (error) {
             console.error("Error fetching brands:", error)
@@ -193,16 +193,83 @@ const Sellproducts = () => {
         setSelectedProduct(productId);
 
         if (productId) {
-            // Find the object details matching the selected dropdown ID
             const foundProduct = products.find((p) => p.id === Number(productId) || p.id === productId);
             if (foundProduct) {
-                // Assign the price mapped inside your ProductList response state
-                setActualSellingPrice(foundProduct.sale_price || "");
+                setActualSellingPrice(foundProduct.sale_price || 0);
             } else {
                 setActualSellingPrice("");
             }
         } else {
             setActualSellingPrice("");
+        }
+        setAdvanceAmount("");
+        setMarkupPercent("");
+    };
+
+    // ── Dynamic Calculations ──
+    const priceNum = Number(actualSellingPrice) || 0;
+    const advanceNum = Number(advanceAmount) || 0;
+    const markupNum = Number(markupPercent) || 0;
+
+    const baseRemaining = Math.max(0, priceNum - advanceNum);
+    const calculatedMarkupAmount = baseRemaining * (markupNum / 100);
+    const balanceAmount = baseRemaining + calculatedMarkupAmount;
+
+    // ── Form Submission Handler ──
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validations
+        if (!selectedProduct || !type || !markupPercent) {
+            toast.error("Please fill all mandatory product fields.");
+            return;
+        }
+        if (!productImageFile) {
+            toast.error("Please provide a product proof photo (Upload or Live Webcam).");
+            return;
+        }
+
+        try {
+            setSubmitLoading(true);
+
+            // Preparing Multi-part Form Data
+            const formData = new FormData();
+            formData.append("customer_id", id);
+            formData.append("brand_id", selectedBrand);
+            formData.append("product_id", selectedProduct);
+            formData.append("model_id", selectedModel);
+
+            // ── Backend Validation Keys Alignment ──
+            formData.append("serial_id", selectedSeries);
+            formData.append("duration_months", duration);
+            formData.append("payment_type", type);
+            formData.append("markup_percentage", markupPercent);
+
+            formData.append("advance_amount", advanceAmount);
+            formData.append("actual_selling_price", actualSellingPrice);
+            formData.append("balance_amount", balanceAmount.toFixed(0));
+
+            // Standard File field (Ab webcam wali image bi isi key pr jaygi as a true file binary)
+            formData.append("proof_image", productImageFile);
+
+            const res = await api.post("/sale/store", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            if (res.data?.success || res.status === 200 || res.status === 201) {
+                toast.success(res.data?.message || "Product sale processed successfully!");
+                navigate('/all-Customer');
+            } else {
+                toast.error(res.data?.message || "Something went wrong.");
+            }
+        } catch (error) {
+            console.error("Submission Error:", error);
+            const serverMessage = error.response?.data?.message;
+            toast.error(serverMessage || "Failed to submit sale data. Please try again.");
+        } finally {
+            setSubmitLoading(false);
         }
     };
 
@@ -213,10 +280,11 @@ const Sellproducts = () => {
         "text-sm sm:text-base font-semibold text-[#0F1729]"
 
     return (
-        <div className="p-1 md:p-3">
+        <form onSubmit={handleSubmit} className="p-1 md:p-3">
             {/* Header / Navigation */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
                 <button
+                    type="button"
                     onClick={() => navigate('/all-Customer')}
                     className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition font-medium"
                 >
@@ -264,7 +332,7 @@ const Sellproducts = () => {
                                 <select
                                     className={inputClass}
                                     value={selectedProduct}
-                                    onChange={handleProductChange} // Changed from inline setter to our handler logic
+                                    onChange={handleProductChange}
                                 >
                                     <option value="">Select</option>
                                     {products && products.map((p) => (
@@ -303,9 +371,13 @@ const Sellproducts = () => {
 
                             <div>
                                 <label className={labelClass}>Duration</label>
-                                <select className={inputClass}>
+                                <select
+                                    className={inputClass}
+                                    value={duration}
+                                    onChange={(e) => setDuration(e.target.value)}
+                                >
                                     <option value="">Select</option>
-                                    <option value="advance">12 Months</option>
+                                    <option value="12">12 Months</option>
                                 </select>
                             </div>
 
@@ -314,26 +386,41 @@ const Sellproducts = () => {
                                 <select
                                     className={inputClass}
                                     value={type}
-                                    onChange={(e) => setType(e.target.value)}
+                                    onChange={(e) => {
+                                        setType(e.target.value);
+                                        setAdvanceAmount("");
+                                    }}
                                 >
                                     <option value="">Select</option>
-                                    <option value="first">First Installment</option>
-                                    <option value="advance">Advance</option>
+                                    <option value="first_installment">First Installment</option>
+                                    <option value="advance_amount">Advance</option>
                                 </select>
                             </div>
 
                             {type && (
                                 <div>
                                     <label className={labelClass}>
-                                        {type === "first" ? "First Installment" : "Advance Amount"}
+                                        {type === "first_installment" ? "First Installment Amount" : "Advance Amount"}
                                     </label>
-                                    <input type='text' placeholder='0000000' className={inputClass} />
+                                    <input
+                                        type='number'
+                                        placeholder='0000000'
+                                        className={inputClass}
+                                        value={advanceAmount}
+                                        onChange={(e) => setAdvanceAmount(e.target.value)}
+                                    />
                                 </div>
                             )}
 
                             <div>
-                                <label className={labelClass}>Markup</label>
-                                <input type='text' placeholder='0000000' className={inputClass} />
+                                <label className={labelClass}>Markup %</label>
+                                <input
+                                    type='number'
+                                    placeholder='e.g. 50'
+                                    className={inputClass}
+                                    value={markupPercent}
+                                    onChange={(e) => setMarkupPercent(e.target.value)}
+                                />
                             </div>
 
                             <div>
@@ -349,7 +436,13 @@ const Sellproducts = () => {
 
                             <div>
                                 <label className={labelClass}>Balance Amount</label>
-                                <input type='text' placeholder='0000000' className={inputClass} />
+                                <input
+                                    type='text'
+                                    placeholder='0000000'
+                                    className={`${inputClass} cursor-not-allowed bg-gray-100 text-gray-800 font-semibold`}
+                                    value={selectedProduct && type ? balanceAmount.toFixed(0) : ""}
+                                    readOnly
+                                />
                             </div>
 
                         </div>
@@ -371,18 +464,21 @@ const Sellproducts = () => {
                                         />
                                         <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-3 px-3">
                                             <button
+                                                type="button"
                                                 onClick={capturePhoto}
                                                 className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-md transition"
                                             >
                                                 Capture Photo
                                             </button>
                                             <button
+                                                type="button"
                                                 onClick={toggleCamera}
                                                 className="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold shadow-md transition"
                                             >
                                                 Switch Camera
                                             </button>
                                             <button
+                                                type="button"
                                                 onClick={stopCamera}
                                                 className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-md transition"
                                             >
@@ -390,19 +486,17 @@ const Sellproducts = () => {
                                             </button>
                                         </div>
                                     </div>
-                                ) : productImage ? (
+                                ) : productImageFile ? (
                                     <div className="relative group w-48 h-36 border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                                         <img
-                                            src={productImage}
+                                            src={URL.createObjectURL(productImageFile)}
                                             alt="Product proof preview"
                                             className="w-full h-full object-cover"
                                         />
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
                                             <button
-                                                onClick={() => {
-                                                    setProductImage(null)
-                                                    setProductImageFile(null)
-                                                }}
+                                                type="button"
+                                                onClick={() => setProductImageFile(null)}
                                                 className="px-3 py-1.5 bg-rose-600 text-white text-xs font-semibold rounded hover:bg-rose-700 transition"
                                             >
                                                 Remove Photo
@@ -422,12 +516,14 @@ const Sellproducts = () => {
                                 {!cameraActive && (
                                     <div className="flex flex-wrap items-center justify-center gap-3">
                                         <button
+                                            type="button"
                                             onClick={() => fileInputRef.current?.click()}
                                             className="px-4 py-2 border border-[#E1E7EF] bg-white hover:bg-gray-50 text-gray-700 text-xs sm:text-sm font-semibold rounded-lg transition shadow-sm cursor-pointer"
                                         >
                                             Upload from Device
                                         </button>
                                         <button
+                                            type="button"
                                             onClick={startCamera}
                                             className="px-4 py-2 bg-[#0062BD] hover:bg-[#0054A3] text-white text-xs sm:text-sm font-semibold rounded-lg transition shadow-sm cursor-pointer"
                                         >
@@ -444,6 +540,18 @@ const Sellproducts = () => {
                                     className="hidden"
                                 />
                             </div>
+                        </div>
+
+                        {/* Submit Button Section */}
+                        <div className="mt-6 flex justify-end">
+                            <button
+                                type="submit"
+                                disabled={submitLoading}
+                                className="w-full sm:w-auto px-6 py-3 bg-[#0062BD] hover:bg-[#0054A3] disabled:bg-blue-400 text-white font-semibold rounded-lg transition shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                            >
+                                {submitLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                                {submitLoading ? "Processing Sale..." : "Submit Sale Details"}
+                            </button>
                         </div>
 
                     </div>
@@ -501,7 +609,7 @@ const Sellproducts = () => {
                 </div>
 
             </div>
-        </div >
+        </form>
     )
 }
 
