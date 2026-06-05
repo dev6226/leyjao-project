@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Logo from "../../assets/logo.png"
 import Dashboard from "../../assets/dashboard.png"
 import Customer from "../../assets/customer.png"
@@ -53,20 +54,46 @@ const navItems = [
 ]
 
 const NavItem = ({ item, collapsed }) => {
-    const [open, setOpen] = useState(false)
+    const location = useLocation() // 2. Current pathname get karein
+    const currentPath = location.pathname
 
-    const linkClass = "group flex h-[60px] w-full items-center gap-3 rounded-lg bg-[#FFFFFF] px-3 text-sm font-medium  transition-all duration-200 hover:bg-[#0062BD] hover:text-[#FFFFFF]"
+    // 3. Check karein agar is item ka koi submenu active route se match karta hai
+    const isSubmenuActive = item.submenu
+        ? item.submenu.some(sub => sub.href === currentPath)
+        : false
+
+    // 4. Agar submenu active ho to dropdown ko default open rakhein
+    const [open, setOpen] = useState(isSubmenuActive)
+
+    // Jab be route change ho aur sub-menu active ho, to dropdown open ho jaye
+    useEffect(() => {
+        if (isSubmenuActive) {
+            setOpen(true)
+        }
+    }, [currentPath, isSubmenuActive])
+
+    // Direct match check karne ke liye (Main menu items ke liye)
+    const isMainActive = item.href === currentPath
+
+    // Active state par styling badalne ke liye classes
+    const linkClass = `group flex h-[60px] w-full items-center gap-3 rounded-lg px-3 text-sm font-medium transition-all duration-200 
+        ${(isMainActive || isSubmenuActive) ? 'bg-[#0062BD] text-[#FFFFFF]' : 'bg-[#FFFFFF] hover:bg-[#0062BD] hover:text-[#FFFFFF]'}`
 
     if (item.submenu) {
         return (
             <li className="relative">
-                <button onClick={() => setOpen(!open)} className={linkClass + " cursor-pointer"}>
-                    <img src={item.icon} alt="" className="h-[17px] w-[17px] transition duration-200 group-hover:brightness-0 group-hover:invert " />
+                <button onClick={() => setOpen(!open)} className={`${linkClass} cursor-pointer w-full`}>
+                    <img
+                        src={item.icon}
+                        alt=""
+                        className={`h-[17px] w-[17px] transition duration-200 group-hover:brightness-0 group-hover:invert ${(isSubmenuActive) ? 'brightness-0 invert' : ''}`}
+                    />
                     {!collapsed && (
                         <>
-                            <span className="flex-1 text-left text-[14px] font-medium custom-gray group-hover:text-white">{item.label}</span>
+                            <span className={`flex-1 text-left text-[14px] font-medium group-hover:text-white ${(isSubmenuActive) ? 'text-white' : 'custom-gray'}`}>
+                                {item.label}
+                            </span>
 
-                            {/* Updated SVG */}
                             <svg
                                 className={`w-3 h-[7px] flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +102,7 @@ const NavItem = ({ item, collapsed }) => {
                             >
                                 <path
                                     d="M10.9917 -0.00188446L11.97 0.977312L6.63841 6.31074C6.55298 6.39672 6.45139 6.46495 6.33949 6.5115C6.22759 6.55806 6.10759 6.58203 5.98638 6.58203C5.86518 6.58203 5.74518 6.55806 5.63328 6.5115C5.52138 6.46495 5.41979 6.39672 5.33436 6.31074L0 0.977312L0.978273 -0.000961304L5.985 5.00484L10.9917 -0.00188446Z"
-                                    fill="#898989"
+                                    fill={isSubmenuActive ? "#FFFFFF" : "#898989"}
                                 />
                             </svg>
                         </>
@@ -83,13 +110,20 @@ const NavItem = ({ item, collapsed }) => {
                 </button>
                 {!collapsed && open && (
                     <ul className="ml-10 mt-1 space-y-1">
-                        {item.submenu.map(sub => (
-                            <li key={sub.label}>
-                                <a href={sub.href} className="block rounded-md px-3 py-2 text-sm custom-gray hover:text-[#0062BD] font-semibold">
-                                    {sub.label}
-                                </a>
-                            </li>
-                        ))}
+                        {item.submenu.map(sub => {
+                            const isSubLinkActive = sub.href === currentPath
+                            return (
+                                <li key={sub.label}>
+                                    <a
+                                        href={sub.href}
+                                        className={`block rounded-md px-3 py-2 text-sm font-semibold transition-colors duration-200
+                                            ${isSubLinkActive ? 'text-[#0062BD]' : 'custom-gray hover:text-[#0062BD]'}`}
+                                    >
+                                        {sub.label}
+                                    </a>
+                                </li>
+                            )
+                        })}
                     </ul>
                 )}
             </li>
@@ -99,21 +133,16 @@ const NavItem = ({ item, collapsed }) => {
     return (
         <li className="relative">
             <a href={item.href} className={linkClass}>
-
-                {/* ICON */}
                 <img
                     src={item.icon}
                     alt=""
-                    className="h-[17px] w-[17px] transition duration-200 group-hover:brightness-0 group-hover:invert"
+                    className={`h-[17px] w-[17px] transition duration-200 group-hover:brightness-0 group-hover:invert ${isMainActive ? 'brightness-0 invert' : ''}`}
                 />
-
-                {/* TEXT */}
                 {!collapsed && (
-                    <span className="flex-1 text-sm font-medium custom-gray group-hover:text-white transition duration-200">
+                    <span className={`flex-1 text-sm font-medium group-hover:text-white transition duration-200 ${isMainActive ? 'text-white' : 'custom-gray'}`}>
                         {item.label}
                     </span>
                 )}
-
             </a>
         </li>
     )

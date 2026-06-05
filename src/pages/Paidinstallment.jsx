@@ -94,11 +94,11 @@ const Paidinstallment = () => {
             label: 'Date',
             render: (row) => <span className="text-gray-600">{row.updated_at ? row.updated_at.split(' ')[0] : row.due_date?.split(' ')[0] || '-'}</span>
         },
-        {
-            key: 'cn_number',
-            label: 'CN#',
-            render: (row) => <span className="font-medium text-gray-700">{row.cn_number}</span>
-        },
+        // {
+        //     key: 'cn_number',
+        //     label: 'CN#',
+        //     render: (row) => <span className="font-medium text-gray-700">{row.cn_number}</span>
+        // },
         {
             key: 'customer_name',
             label: 'Name',
@@ -214,7 +214,7 @@ const Paidinstallment = () => {
                         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
                             <div>
                                 <h3 className="text-lg font-bold text-gray-900">Installment Verification Details</h3>
-                                <p className="text-xs text-gray-500 mt-0.5">CN Number: <span className="font-semibold text-gray-700">{selectedData.cn_number}</span></p>
+                                {/* <p className="text-xs text-gray-500 mt-0.5">CN Number: <span className="font-semibold text-gray-700">{selectedData.cn_number}</span></p> */}
                             </div>
                             <button
                                 onClick={closeModal}
@@ -254,10 +254,10 @@ const Paidinstallment = () => {
                                         <span className="text-gray-400 block text-xs">Product Purchased</span>
                                         <span className="font-semibold text-gray-800">{selectedData.product_name}</span>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <span className="text-gray-400 block text-xs">Total Sale Value</span>
                                         <span className="font-bold text-gray-800">Rs. {selectedData.total_sale_amount?.toLocaleString()}</span>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
 

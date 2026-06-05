@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from './components/layout/Sidebar'
 import Navbar from './components/layout/Navbar'
 import Dashboard from './pages/dashboard/Dashboard'
 import NewCustomer from './pages/NewCustomer'
 import AllCustomer from './pages/AllCustomer'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom'
 import Login from './pages/auth/Login.jsx'
 import ViewCustomer from './pages/ViewCustomer.jsx'
 import Paidinstallment from './pages/Paidinstallment.jsx'
@@ -30,15 +30,126 @@ import CreatejobTitle from './pages/CreatejobTitle.jsx'
 import Sellproducts from './pages/Sellproducts.jsx'
 import Payinstallment from './pages/Payinstallment.jsx'
 
+// ==========================================
+// GLOBALLY NAVIGATION GUARD COMPONENT (Native Fix)
+// ==========================================
+const GlobalNavigationGuard = () => {
+  const [isDirty, setIsDirty] = useState(false)
+  const location = useLocation()
 
+  useEffect(() => {
+    const handleGlobalInput = (e) => {
+      const tag = e.target.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+        setIsDirty(true)
+      }
+    }
 
+    const handleGlobalSubmit = () => {
+      setIsDirty(false)
+    }
+
+    window.addEventListener('input', handleGlobalInput)
+    window.addEventListener('submit', handleGlobalSubmit)
+
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('input', handleGlobalInput)
+      window.removeEventListener('submit', handleGlobalSubmit)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [isDirty])
+
+  useEffect(() => {
+    setIsDirty(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    if (!isDirty) return
+
+    window.history.pushState(null, null, window.location.pathname)
+
+    const handlePopState = (e) => {
+      if (isDirty) {
+        const confirmLeave = window.confirm("You have unsaved changes. Are you sure you want to leave this page?")
+        if (confirmLeave) {
+          setIsDirty(false)
+          window.history.back()
+        } else {
+          window.history.pushState(null, null, window.location.pathname)
+        }
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [isDirty])
+
+  return null
+}
+
+// ==========================================
+// DYNAMIC BREADCRUMBS COMPONENT
+// ==========================================
+const Breadcrumbs = () => {
+  const location = useLocation()
+  const pathnames = location.pathname.split('/').filter((x) => x)
+
+  // Agar user dashboard par hai to breadcrumb khali rakhein ya simple "Dashboard" dikhayein
+  if (location.pathname === '/') return null
+
+  return (
+    <nav className="flex items-center space-x-2 text-xs sm:text-sm text-[#64748B] mb-4 font-medium" aria-label="Breadcrumb">
+      <Link to="/" className="hover:text-[#0062BD] transition-colors">
+        Dashboard
+      </Link>
+
+      {pathnames.map((value, index) => {
+        const last = index === pathnames.length - 1
+        const to = `/${pathnames.slice(0, index + 1).join('/')}`
+
+        // Agar segment dynamic number/ID hai to use 'Detail' ya generic name de dein
+        const isParamId = !isNaN(value)
+        let label = value.replace(/-/g, ' ')
+
+        if (isParamId) {
+          label = 'View Details'
+        }
+
+        // Label ka first letter capital karne ke liye
+        label = label.charAt(0).toUpperCase() + label.slice(1)
+
+        return (
+          <div key={to} className="flex items-center space-x-2">
+            <span className="text-[#CBD5E1] select-none">/</span>
+            {last ? (
+              <span className="text-[#0F172A] font-semibold">{label}</span>
+            ) : (
+              <Link to={to} className="hover:text-[#0062BD] transition-colors">
+                {label}
+              </Link>
+            )}
+          </div>
+        )
+      })}
+    </nav>
+  )
+}
 
 const Layout = () => {
   const [collapsed, setCollapsed] = useState(false)
   const location = useLocation()
   const hideLayout = location.pathname.startsWith('/auth')
 
-  // routes
   return (
     <div className="flex h-screen overflow-hidden bg-[#F9FAFB]">
 
@@ -55,6 +166,10 @@ const Layout = () => {
           <Toaster position="top-right" />
 
           <div className="flex-1 overflow-y-auto p-3 md:p-6">
+
+            {/* ── BREADCRUMBS GLOBAL INJECTION ── */}
+            {!hideLayout && <Breadcrumbs />}
+
             <Routes>
               <Route path='/' element={<Protectedroute><Dashboard /></Protectedroute>} />
               <Route path='/auth/login' element={<Login />} />
@@ -92,8 +207,8 @@ const Layout = () => {
 
 const App = () => {
   return (
-
     <BrowserRouter>
+      <GlobalNavigationGuard />
       <Layout />
     </BrowserRouter>
   )

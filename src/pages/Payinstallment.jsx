@@ -18,6 +18,9 @@ const Payinstallment = () => {
     const [remarks, setRemarks] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
+    // 🔥 NEW STATE: Payment success hone par button lock karne ke liye
+    const [isPaidSuccess, setIsPaidSuccess] = useState(false);
+
     // Status and Toast state
     const [message, setMessage] = useState({ type: '', text: '' });
     const [toast, setToast] = useState({ show: false, type: '', text: '' });
@@ -95,10 +98,13 @@ const Payinstallment = () => {
         try {
             const response = await api.post('/payment/store', payload);
             if (response.data.success || response.status === 200) {
+                // 🔥 SUCCESS: Lock the button immediately
+                setIsPaidSuccess(true);
+
                 setMessage({ type: 'success', text: 'Payment processed successfully!' });
                 showToast('success', 'Payment recorded successfully!');
                 setTimeout(() => {
-                    navigate(-1);
+                    navigate('/paid-installments');
                 }, 2000);
             } else {
                 const errMsg = response.data.message || 'Something went wrong.';
@@ -116,7 +122,7 @@ const Payinstallment = () => {
     };
 
     return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen flex justify-center items-center relative">
+        <div className="bg-gray-50 min-h-screen flex justify-center items-center relative">
 
             {/* 🔥 FLOATING TOASTER COMPONENT */}
             {toast.show && (
@@ -131,7 +137,7 @@ const Payinstallment = () => {
                 </div>
             )}
 
-            <div className="bg-white w-full max-w-xl rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+            <div className="bg-white w-full rounded-2xl shadow-md border border-gray-100 overflow-hidden">
 
                 {/* Form Header */}
                 <div className="bg-blue-600 p-6 text-white flex justify-between items-center">
@@ -210,12 +216,15 @@ const Payinstallment = () => {
                             type="number"
                             step="0.01"
                             required
+                            disabled={isPaidSuccess} // Success hone par inputs ko bhi lock kar dete hain
                             value={paidAmount}
                             onChange={(e) => setPaidAmount(e.target.value)}
                             placeholder="Enter paid amount"
-                            className={`w-full h-11 px-4 rounded-xl bg-white text-gray-900 font-bold focus:ring-4 outline-none transition-all text-base ${isInvalidAmount
-                                ? 'border-red-400 focus:ring-red-100 focus:border-red-500 animate-pulse'
-                                : 'border-blue-300 focus:ring-blue-100 focus:border-blue-500'
+                            className={`w-full h-11 px-4 rounded-xl text-gray-900 font-bold focus:ring-4 outline-none transition-all text-base ${isPaidSuccess
+                                ? 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
+                                : isInvalidAmount
+                                    ? 'bg-white border-red-400 focus:ring-red-100 focus:border-red-500 animate-pulse'
+                                    : 'bg-white border-blue-300 focus:ring-blue-100 focus:border-blue-500'
                                 }`}
                         />
                         {isInvalidAmount ? (
@@ -248,10 +257,14 @@ const Payinstallment = () => {
                         <textarea
                             rows="3"
                             required
+                            disabled={isPaidSuccess} // Success hone par lock
                             value={remarks}
                             onChange={(e) => setRemarks(e.target.value)}
                             placeholder="Enter payment notes or method details (e.g., Cash collection details)"
-                            className="w-full p-4 rounded-xl bg-white border border-gray-300 text-gray-800 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm resize-none"
+                            className={`w-full p-4 rounded-xl text-gray-800 outline-none transition-all text-sm resize-none ${isPaidSuccess
+                                ? 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
+                                : 'bg-white border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500'
+                                }`}
                         />
                     </div>
 
@@ -259,21 +272,34 @@ const Payinstallment = () => {
                     <div className="pt-2 flex gap-3">
                         <button
                             type="button"
+                            disabled={submitting || isPaidSuccess}
                             onClick={() => navigate(-1)}
-                            className="w-1/3 h-11 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 font-semibold text-sm transition-all"
+                            className={`w-1/3 h-11 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm transition-all ${(submitting || isPaidSuccess) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+                                }`}
                         >
                             Cancel
                         </button>
+
+                        {/* ── UPDATED SECURE CONFIRM BUTTON ── */}
                         <button
                             type="submit"
-                            disabled={submitting || isInvalidAmount}
-                            className={`w-2/3 h-11 rounded-xl text-white font-semibold text-sm transition-all flex justify-center items-center shadow-md ${(submitting || isInvalidAmount)
-                                ? 'bg-gray-400 cursor-not-allowed shadow-none'
-                                : 'bg-blue-600 hover:bg-blue-700 active:scale-98 shadow-blue-100'
+                            disabled={submitting || isInvalidAmount || isPaidSuccess}
+                            className={`w-2/3 h-11 rounded-xl text-white font-semibold text-sm transition-all flex justify-center items-center gap-2 shadow-md ${isPaidSuccess
+                                ? 'bg-emerald-600 cursor-not-allowed shadow-none scale-100' // Transaction Success State
+                                : (submitting || isInvalidAmount)
+                                    ? 'bg-gray-400 cursor-not-allowed shadow-none'          // Processing / Error State
+                                    : 'bg-blue-600 hover:bg-blue-700 active:scale-98 shadow-blue-100' // Active Default State
                                 }`}
                         >
                             {submitting ? (
                                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                            ) : isPaidSuccess ? (
+                                <>
+                                    <svg className="w-5 h-5 animate-[bounce_0.4s_ease-in-out_1]" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Payment Confirmed
+                                </>
                             ) : (
                                 'Confirm Payment'
                             )}

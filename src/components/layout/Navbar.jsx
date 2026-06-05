@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import navItems from '../../data/navItems'
 import Profile from "../../assets/ley-joo-image.png"
 import Logo from "../../assets/logo.png"
-
 const BellIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
     <path fillRule="evenodd" clipRule="evenodd" d="M7.04699 3.22C6.42599 3.388 5.84599 3.651 5.44199 4.015C4.33899 5.01 3.88999 6.358 3.88999 8.788C3.88999 10.52 2.90399 12.16 2.19399 13.222C2.03999 13.454 1.99199 13.675 2.00099 13.808C2.00499 13.868 2.01899 13.896 2.02499 13.906C2.02899 13.913 2.04099 13.932 2.08899 13.958C2.78099 14.328 3.82499 14.598 5.03199 14.769C6.19378 14.9249 7.36479 15.0021 8.53699 15C8.80221 15 9.05656 15.1054 9.2441 15.2929C9.43164 15.4804 9.53699 15.7348 9.53699 16C9.53699 16.2652 9.43164 16.5196 9.2441 16.7071C9.05656 16.8946 8.80221 17 8.53699 17C7.40899 17 6.05299 16.935 4.75099 16.75C3.46899 16.567 2.14799 16.257 1.14599 15.722C0.408993 15.328 0.0529929 14.642 0.00599288 13.943C-0.0400071 13.284 0.182993 12.633 0.530993 12.112C1.24799 11.038 1.88999 9.853 1.88999 8.788C1.88999 6.127 2.38199 4.081 4.10299 2.53C4.82799 1.876 5.73899 1.503 6.52199 1.29C7.17857 1.10792 7.85572 1.01046 8.53699 1C8.80221 1 9.05656 1.10536 9.2441 1.29289C9.43164 1.48043 9.53699 1.73478 9.53699 2C9.53699 2.26522 9.43164 2.51957 9.2441 2.70711C9.05656 2.89464 8.80221 3 8.53699 3C8.23099 3 7.66099 3.052 7.04699 3.22Z" fill="#64748B" />
@@ -57,6 +57,46 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
+  const location = useLocation() // 2. Location get karein
+  const [pageTitle, setPageTitle] = useState("Dashboard")
+
+  // 3. Page Title update karne ka logic
+  useEffect(() => {
+    const currentPath = location.pathname
+
+    // Default label set karein
+    let activeLabel = "Dashboard"
+
+    // Deep search algorithm
+    for (const item of navItems) {
+      // 1. Pehle main menu items check karein
+      if (item.href === currentPath) {
+        activeLabel = item.label
+        break // Match mil gaya, loop break kar do
+      }
+
+      // 2. Phir check karein agar submenu hai to uske andar search karein
+      if (item.submenu) {
+        const foundSubItem = item.submenu.find(sub => sub.href === currentPath)
+        if (foundSubItem) {
+          activeLabel = foundSubItem.label
+          break // Match mil gaya, loop break kar do
+        }
+      }
+    }
+
+    // 3. Dynamic IDs ke liye special cases (Optional fallback)
+    if (activeLabel === "Dashboard" && currentPath !== "/") {
+      if (currentPath.includes('/customer/')) activeLabel = "Customer Details"
+      else if (currentPath.includes('/sell-product/')) activeLabel = "Sell Product"
+      else if (currentPath.includes('/employee/')) activeLabel = "Employee Profile"
+    }
+
+    setPageTitle(activeLabel)
+  }, [location.pathname]) // Dependency me sirf pathname rakhein properly update hone ke liye
+
+  // Aapka dynamic header ab dropdown routes ke liye bhi bilkul perfect kaam karega! Is code ko implement karke check karein aur batayein.
+
   const handleLogout = () => {
     sessionStorage.removeItem("token")
     window.location.href = "/auth/login"
@@ -65,19 +105,19 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop Navbar */}
-      <header className="hidden lg:flex w-full items-center  px-6 py-4 sticky top-0 z-30">
+      <header className="hidden lg:flex w-full items-center px-6 py-4 sticky top-0 z-30">
         <div className="w-full bg-[#FFFFFF] h-[62px] border-[1px] border-[#E1E7EF] rounded-[12px] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)]">
           <div className="flex items-center justify-between px-4 h-full">
-            <h1 className="text-[20px] font-semibold text-[#0F172A]">Dashboard</h1>
+            {/* 4. Yahan 'Dashboard' ki jagah dynamic title lagayen */}
+            <h1 className="text-[20px] font-semibold text-[#0F1729]">{pageTitle}</h1>
 
             <div className="flex items-center gap-4">
-              {/* Notification */}
+              {/* Notification & Profile same rahega */}
               <button type="button" className="relative h-[38px] w-[38px] flex items-center justify-center rounded-[8px] bg-[#F1F5F9]">
                 <span className="absolute -top-2 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-[3px] bg-[#BD2F30] text-[10px] font-semibold text-white">2</span>
                 <BellIcon />
               </button>
 
-              {/* Profile */}
               <div className="relative">
                 <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-3 px-3 py-1 focus:outline-none">
                   <div className="h-10 w-10 overflow-hidden rounded-full bg-indigo-100">
@@ -91,7 +131,7 @@ const Navbar = () => {
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                    <button onClick={() => handleLogout()} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
                   </div>
                 )}
               </div>
