@@ -293,7 +293,7 @@ const Sellproducts = () => {
 
             if (res.data?.success || res.status === 200 || res.status === 201) {
                 toast.success(res.data?.message || "Product sale processed successfully!");
-                navigate('/all-Customer');
+                navigate('/all-Customer', { state: { sellSuccess: true, customerId: Number(id) } });
             } else {
                 toast.error(res.data?.message || "Something went wrong.");
             }

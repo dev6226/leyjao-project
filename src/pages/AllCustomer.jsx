@@ -1,21 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import DataTable from '../components/table/DataTable.jsx'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // 🔥 Completed Tick Icon ke liye
 import api from '../api/api';
 
 const AllCustomer = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to get state from navigation
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(''); // 🔥 Search state function handler
 
-  // 🔥 LOCAL STORAGE TRACKER: Un customers ki IDs nikalna jinki installment ban chuki hai
-  const [processedCustomers, setProcessedCustomers] = useState(() => {
-    const saved = localStorage.getItem('processed_installment_customers');
+  // Is state mein un customers ki IDs store hongi jinka form fill ho chuka hai
+  const [soldCustomers, setSoldCustomers] = useState(() => {
+    const saved = sessionStorage.getItem('soldCustomers');
     return saved ? JSON.parse(saved) : [];
   });
+
+  // Check if we came back after a successful form submission
+  useEffect(() => {
+    if (location.state?.sellSuccess && location.state?.customerId) {
+      const successfulId = location.state.customerId;
+
+      setSoldCustomers((prev) => {
+        const updated = [...new Set([...prev, successfulId])];
+        sessionStorage.setItem('soldCustomers', JSON.stringify(updated));
+        return updated;
+      });
+
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -33,7 +48,6 @@ const AllCustomer = () => {
           name: customer.full_name || '-',
           phone: customer.phone || '-',
           cnic: customer.cnic || '-',
-          status: customer.status || 'Draft',
         }));
 
         setRows(mapped);
@@ -47,42 +61,14 @@ const AllCustomer = () => {
     fetchCustomers();
   }, []);
 
-  // 🔥 CUSTOMER CLICK HANDLER: ID ko save karna aur redirect karna
-  const handleSellClick = (customerId) => {
-    const updatedList = [...processedCustomers, customerId];
-    setProcessedCustomers(updatedList);
-    localStorage.setItem('processed_installment_customers', JSON.stringify(updatedList));
-
-    // Installment page par redirect karna
-    navigate(`/sell-products/${customerId}`);
-  };
-
-  // Real-time Search Filter Logic
-  const filteredRows = rows.filter(row => {
-    const term = searchTerm.toLowerCase();
-    return (
-      row.name.toLowerCase().includes(term) ||
-      row.phone.toLowerCase().includes(term) ||
-      row.cnic.toLowerCase().includes(term) ||
-      row.cn.toLowerCase().includes(term)
-    );
-  });
-
-  // Main external action button mapper
+  // Top/Global Table Button component (agar aapki DataTable component isko use karti hai)
   const button = (row) => {
-    const isAlreadyCreated = processedCustomers.includes(row.id);
-
-    if (isAlreadyCreated) {
-      return (
-        <span className="inline-flex items-center gap-1 text-emerald-600 font-semibold text-xs bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200">
-          <CheckCircleIcon fontSize="inherit" /> Completed
-        </span>
-      );
-    }
+    const isSold = soldCustomers.includes(row.id);
+    if (isSold) return <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg">Sold</span>;
 
     return (
       <button
-        onClick={() => handleSellClick(row.id)}
+        onClick={() => navigate(`/sell-products/${row.id}`)}
         className="px-4 py-1.5 bg-[#0062BD] hover:bg-[#0054A3] text-white text-xs font-semibold rounded-lg transition-all shadow-sm"
       >
         Sell
@@ -96,26 +82,12 @@ const AllCustomer = () => {
     { key: 'name', label: 'Name' },
     { key: 'phone', label: 'Phone' },
     { key: 'cnic', label: 'CNIC' },
-    {
-      key: 'status', label: 'Status',
-      render: (row) => {
-        const isAlreadyCreated = processedCustomers.includes(row.id);
-        return (
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${isAlreadyCreated
-            ? 'border-emerald-400 text-emerald-600 bg-emerald-50'
-            : 'border-orange-400 text-orange-500 bg-orange-50'
-            }`}>
-            {isAlreadyCreated ? 'Completed' : row.status}
-          </span>
-        );
-      }
-    },
 
     {
       key: 'action', label: 'Action',
       render: (row) => {
-        // 🔥 Check: Kya is customer ki ID processed list mein hai?
-        const isAlreadyCreated = processedCustomers.includes(row.id);
+        // Check karein kya ye customer successfully processed ho chuka hai
+        const isSold = soldCustomers.includes(row.id);
 
         return (
           <div className="flex items-center gap-2">
@@ -127,19 +99,18 @@ const AllCustomer = () => {
               <VisibilityIcon fontSize="small" className="text-gray-500 hover:text-[#0062BD]" />
             </button>
 
-            {/* ── DYNAMIC BUTTON SWITCH ── */}
-            {isAlreadyCreated ? (
-              <div className="inline-flex items-center gap-1 text-emerald-600 font-bold text-xs bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
-                <CheckCircleIcon className="w-3.5 h-3.5 text-emerald-500" />
-                Completed
-              </div>
-            ) : (
+            {/* Conditional Rendering: Agar form fill ho chuka hai to button hide ho jaye ga, warna dikhega */}
+            {!isSold ? (
               <button
-                onClick={() => handleSellClick(row.id)}
+                onClick={() => navigate(`/sell-products/${row.id}`)}
                 className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded transition"
               >
                 Sell
               </button>
+            ) : (
+              <span className="px-3 py-1 bg-gray-100 text-gray-400 text-xs font-semibold rounded cursor-not-allowed">
+                Sold Out
+              </span>
             )}
           </div>
         );
@@ -171,8 +142,6 @@ const AllCustomer = () => {
           </div>
           <input
             type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by Name, Phone, CNIC, Product"
             className='w-full h-11 pl-10 pr-4 rounded-lg border border-[#E1E7EF] bg-white outline-none shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] placeholder:text-[#65758B] placeholder:text-sm'
           />
@@ -191,13 +160,13 @@ const AllCustomer = () => {
         {loading ? (
           <p className='text-center text-sm text-gray-400 py-10'>Loading...</p>
         ) : (
-          <DataTable rows={filteredRows} columns={columns} button={button} />
+          <DataTable rows={rows} columns={columns} button={button} />
         )}
       </div>
 
       {/* Footer */}
       <div className='mt-6 text-xs text-gray-400 flex flex-col md:flex-row justify-between gap-2'>
-        <p>Copyright © 2026 All rights reserved</p>
+        <p>Copyright © 2025 All rights reserved</p>
         <div className='flex gap-4'>
           <p>Privacy Policy</p>
           <p>Term and Conditions</p>
