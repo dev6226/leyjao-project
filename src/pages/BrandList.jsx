@@ -147,14 +147,14 @@ const BrandList = () => {
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => handleEditClick(brand)}
-                                                className="px-4 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition"
+                                                className="px-4 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition cursor-pointer"
                                             >
                                                 Edit
                                             </button>
 
                                             <button
                                                 onClick={() => handleDelete(brand.id)}
-                                                className="px-4 py-1.5 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
+                                                className="px-4 py-1.5 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition cursor-pointer"
                                             >
                                                 Delete
                                             </button>
@@ -194,14 +194,14 @@ const BrandList = () => {
                             <div className="flex justify-end gap-2">
                                 <button
                                     onClick={() => setIsModel(false)}
-                                    className="px-4 py-2 bg-gray-300 rounded"
+                                    className="px-4 py-2 bg-gray-300 rounded cursor-pointer"
                                 >
                                     Cancel
                                 </button>
 
                                 <button
                                     onClick={hadleUpdate}
-                                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                                    className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer"
                                 >
                                     Save
                                 </button>

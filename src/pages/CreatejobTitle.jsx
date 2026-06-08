@@ -86,13 +86,13 @@ const CreatejobTitle = () => {
                     {/* button */}
                     <div className='flex justify-end gap-x-3 mt-8'>
                         <button className='w-24 h-11 sm:h-9 text-sm 
-                            bg-[#FFFFFF] rounded-lg border-1 border-[#65758B] text-[#65758B] font-medium text-base'>
+                            bg-[#FFFFFF] rounded-lg border-1 border-[#65758B] text-[#65758B] font-medium text-base cursor-pointer'>
                             Cancel
                         </button>
                         <button
                             onClick={handleSave}
                             className='w-24 h-11 sm:h-9 text-sm 
-                            bg-[#2196F3] rounded-lg  text-[#FFFFFF] font-medium text-base'>
+                            bg-[#2196F3] rounded-lg  text-[#FFFFFF] font-medium text-base cursor-pointer'>
                             Save
                         </button>
                     </div>

@@ -116,7 +116,7 @@ const ViewCustomer = () => {
                 <p className="text-gray-500 text-sm mt-1">The customer you are looking for does not exist or has been removed.</p>
                 <button
                     onClick={() => navigate("/all-Customer")}
-                    className="mt-6 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all shadow-sm shadow-blue-100"
+                    className="mt-6 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all shadow-sm shadow-blue-100 cursor-pointer"
                 >
                     Back to Customer List
                 </button>
@@ -132,7 +132,7 @@ const ViewCustomer = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <button
                     onClick={() => navigate("/all-Customer")}
-                    className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
+                    className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
                 >
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm group-hover:border-blue-300 group-hover:bg-blue-50 transition-all">
                         <ChevronLeft size={16} className="text-gray-600 group-hover:text-blue-600" />
@@ -623,7 +623,7 @@ const ViewCustomer = () => {
                     </div>
 
                     {/* Large Image Frame */}
-                    <div className="relative w-full max-w-4xl max-h-[75vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-slate-900/50">
+                    <div className="relative w-full max-w-4xl max-h-[75vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-slate-900/50 cursor-pointer">
                         <img
                             src={previewImage}
                             alt="Verification Preview"

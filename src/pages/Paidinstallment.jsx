@@ -120,7 +120,7 @@ const Paidinstallment = () => {
             render: (row) => (
                 <button
                     onClick={() => openModal(row)} // 🔥 Eye icon par click karne se popup open hoga
-                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 cursor-pointer"
                     title="View Details"
                 >
                     <VisibilityIcon fontSize="small" />
@@ -177,7 +177,7 @@ const Paidinstallment = () => {
                         />
                     </div>
 
-                    <button className='flex items-center gap-2 px-4 h-11 rounded-xl border border-[#E1E7EF] bg-[#FFFFFF] shadow-sm text-[#64748B] hover:bg-gray-50 active:scale-98 transition-all text-sm font-medium'>
+                    <button className='flex items-center gap-2 px-4 h-11 rounded-xl border border-[#E1E7EF] bg-[#FFFFFF] shadow-sm text-[#64748B] hover:bg-gray-50 active:scale-98 transition-all text-sm font-medium cursor-pointer'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="12" viewBox="0 0 11 12" fill="none">
                             <path d="M0.5 0.5H9.83333L6.5 4.83333V11.1667L3.83333 8.5V4.83333L0.5 0.5Z" stroke="#64748B" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
@@ -218,7 +218,7 @@ const Paidinstallment = () => {
                             </div>
                             <button
                                 onClick={closeModal}
-                                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200/60 rounded-xl transition-all"
+                                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200/60 rounded-xl transition-all cursor-pointer"
                             >
                                 <CloseIcon />
                             </button>
@@ -296,7 +296,7 @@ const Paidinstallment = () => {
                         <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end">
                             <button
                                 onClick={closeModal}
-                                className="px-5 h-10 text-sm font-semibold text-gray-600 border border-gray-200 bg-white rounded-xl hover:bg-gray-50 active:scale-98 transition-all"
+                                className="px-5 h-10 text-sm font-semibold text-gray-600 border border-gray-200 bg-white rounded-xl hover:bg-gray-50 active:scale-98 transition-all cursor-pointer"
                             >
                                 Close View
                             </button>

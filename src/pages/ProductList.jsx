@@ -137,10 +137,10 @@ const ProductList = () => {
 
                                         {/* Actions */}
                                         <div className="flex justify-center gap-2">
-                                            <button className="px-4 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition">
+                                            <button className="px-4 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition cursor-pointer">
                                                 Edit
                                             </button>
-                                            <button onClick={() => handleDelete(product.id)} className="px-4 py-1.5 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
+                                            <button onClick={() => handleDelete(product.id)} className="px-4 py-1.5 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition cursor-pointer">
                                                 Delete
                                             </button>
                                         </div>

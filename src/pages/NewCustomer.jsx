@@ -742,7 +742,7 @@ const NewCustomer = () => {
       {/* ── Save Button ────────────────────────────── */}
       <div className='flex justify-end mt-8 mb-4'>
         <button onClick={handleSubmit} disabled={loading}
-          className='px-10 py-3 bg-[#0062BD] hover:bg-[#0054A3] text-white font-semibold rounded-xl transition-all disabled:opacity-60'>
+          className='px-10 py-3 bg-[#0062BD] hover:bg-[#0054A3] text-white font-semibold rounded-xl transition-all disabled:opacity-60 cursor-pointer'>
           {loading ? 'Saving...' : 'Save Customer'}
         </button>
       </div>

@@ -539,13 +539,13 @@ const Addemployee = () => {
 
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row items-center justify-end gap-4 mt-8">
-                    <button className="w-full sm:w-auto px-6 py-3 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition-all">
+                    <button className="w-full sm:w-auto px-6 py-3 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition-all cursor-pointer">
                         Cancel
                     </button>
                     <button
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white transition-all"
+                        className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white transition-all cursor-pointer"
                     >
                         {loading
                             ? (id ? 'Updating...' : 'Saving...')
@@ -584,13 +584,13 @@ const Addemployee = () => {
                         <div className="flex gap-3 w-full">
                             <button
                                 onClick={() => setShowConfirm(false)}
-                                className="flex-1 py-3 rounded-xl border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 transition-all"
+                                className="flex-1 py-3 rounded-xl border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 transition-all cursor-pointer"
                             >
                                 Discard
                             </button>
                             <button
                                 onClick={handleConfirmSave}
-                                className="flex-1 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-all shadow-md"
+                                className="flex-1 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-all shadow-md cursor-pointer"
                             >
                                 {id ? 'Update' : 'Save'}
                             </button>

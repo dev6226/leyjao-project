@@ -26,37 +26,37 @@ const SubmitInstallment = () => {
                             <div>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>Name</label>
                                 <input type='text' placeholder='Enter full name'
-                                     onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
+                                    onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                             </div>
 
                             <div>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>Actual Installment</label>
                                 <input type='number' placeholder="Enter actual installment"
-                                     onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
+                                    onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                             </div>
 
                             <div>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>Installment Receiving</label>
                                 <input type='number' placeholder='00000-0000000-0'
-                                     onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
+                                    onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                             </div>
 
                             <div>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>Remaning Amount</label>
                                 <input type='number' placeholder='0300-0000000'
-                                     onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
+                                    onInput={(e) => { e.target.value = e.target.value.replace(/[^0-9-]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                             </div>
 
                             <div className='md:col-span-2'>
                                 <label className='text-sm sm:text-base font-semibold text-primary'>Remarks</label>
                                 <input type='text' placeholder='ABC'
-                                     onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
+                                    onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className='mt-2 w-full h-11 px-3 rounded-lg border border-[#E1E7EF] focus:outline-none focus:ring-2 focus:ring-[#0062BD] bg-[#F9FAFB]' />
                             </div>
                         </div>
 
                         {/* button */}
                         <div className='flex justify-center sm:justify-end'>
-                            <button className='mt-3 px-6 py-2 rounded-lg bg-[#2196F3] text-[#FFFFFF] text-base sm:text-lg font-semibold w-full sm:w-auto'>
+                            <button className='mt-3 px-6 py-2 rounded-lg bg-[#2196F3] text-[#FFFFFF] text-base sm:text-lg font-semibold w-full sm:w-auto cursor-pointer'>
                                 Submit
                             </button>
                         </div>

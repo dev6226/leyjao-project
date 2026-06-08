@@ -81,7 +81,7 @@ const EmployeeView = () => {
         <>
             <div className="w-full flex justify-end mb-5">
                 <a href={`/add-employee/${employee.id}`}>
-                    <button className="bg-[#FFFFFF] border border-[#2196F3] rounded-xl h-11 px-6 sm:px-8 flex items-center justify-center">
+                    <button className="bg-[#FFFFFF] border border-[#2196F3] rounded-xl h-11 px-6 sm:px-8 flex items-center justify-center cursor-pointer">
                         <h2 className="text-[#2196F3] font-medium text-sm sm:text-base">
                             Edit
                         </h2>

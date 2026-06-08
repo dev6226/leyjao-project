@@ -103,7 +103,7 @@ const EmployeeList = () => {
                 {/* Buttons */}
                 <div className="flex items-center gap-3 w-full lg:w-auto">
 
-                    <button className="h-[50px] px-5 bg-white border border-[#E2E8F0] rounded-xl flex items-center gap-2 text-[#64748B] text-sm font-medium hover:bg-gray-50 transition-all">
+                    <button className="h-[50px] px-5 bg-white border border-[#E2E8F0] rounded-xl flex items-center gap-2 text-[#64748B] text-sm font-medium hover:bg-gray-50 transition-all cursor-pointer">
 
                         <Filter className="w-4 h-4" />
 
@@ -113,7 +113,7 @@ const EmployeeList = () => {
 
                     <Link
                         to="/add-employee"
-                        className="h-[50px] px-6 bg-[#0F6CBD] hover:bg-[#0B5DA7] rounded-xl flex items-center gap-2 text-white text-sm font-semibold transition-all shadow-md"
+                        className="h-[50px] px-6 bg-[#0F6CBD] hover:bg-[#0B5DA7] rounded-xl flex items-center gap-2 text-white text-sm font-semibold transition-all shadow-md cursor-pointer"
                     >
 
                         <Plus className="w-4 h-4" />
@@ -234,11 +234,11 @@ const EmployeeList = () => {
                                         {/* Action */}
                                         <div className="flex items-center justify-center gap-3">
 
-                                            <button className="w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all">
+                                            <button className="w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all cursor-pointer">
 
                                                 <Link
                                                     to={`/employee/${employee.id}`}
-                                                    className="w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all"
+                                                    className="w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all cursor-pointer"
                                                 >
                                                     <Eye className="w-5 h-5 text-[#64748B]" />
                                                 </Link>
@@ -246,7 +246,7 @@ const EmployeeList = () => {
 
                                             <button
                                                 onClick={() => deleteEmployee(employee.id)}
-                                                className="cursor-pointer w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all"
+                                                className="cursor-pointer w-10 h-10 rounded-xl border border-[#E2E8F0] hover:bg-[#F8FAFC] flex items-center justify-center transition-all cursor-pointer"
                                             >
                                                 <Trash2 className="w-5 h-5 text-[#64748B]" />
                                             </button>

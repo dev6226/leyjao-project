@@ -242,7 +242,7 @@ const AddProduct = () => {
                                             <button
                                                 type='button'
                                                 onClick={() => removeSerial(item.id)}
-                                                className='hover:text-red-500'
+                                                className='hover:text-red-500 cursor-pointer'
                                             >
                                                 <X size={16} />
                                             </button>

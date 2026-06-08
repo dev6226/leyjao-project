@@ -69,7 +69,7 @@ const AllCustomer = () => {
     return (
       <button
         onClick={() => navigate(`/sell-products/${row.id}`)}
-        className="px-4 py-1.5 bg-[#0062BD] hover:bg-[#0054A3] text-white text-xs font-semibold rounded-lg transition-all shadow-sm"
+        className="px-4 py-1.5 bg-[#0062BD] hover:bg-[#0054A3] text-white text-xs font-semibold rounded-lg transition-all shadow-sm cursor-pointer"
       >
         Sell
       </button>
@@ -93,7 +93,7 @@ const AllCustomer = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate(`/view-customer/${row.id}`)}
-              className="p-1 hover:bg-gray-100 rounded transition"
+              className="p-1 hover:bg-gray-100 rounded transition cursor-pointer"
               title="View Details"
             >
               <VisibilityIcon fontSize="small" className="text-gray-500 hover:text-[#0062BD]" />
@@ -103,7 +103,7 @@ const AllCustomer = () => {
             {!isSold ? (
               <button
                 onClick={() => navigate(`/sell-products/${row.id}`)}
-                className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded transition"
+                className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded transition cursor-pointer"
               >
                 Sell
               </button>
@@ -147,7 +147,7 @@ const AllCustomer = () => {
           />
         </div>
 
-        <button className='flex items-center gap-2 px-4 h-11 rounded-xl border border-[#E1E7EF] bg-[#FFFFFF] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] text-[#64748B]'>
+        <button className='flex items-center gap-2 px-4 h-11 rounded-xl border border-[#E1E7EF] bg-[#FFFFFF] shadow-[0px_12.67px_22.52px_0px_rgba(208,210,218,0.15)] text-[#64748B] cursor-pointer'>
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="12" viewBox="0 0 11 12" fill="none">
             <path d="M0.5 0.5H9.83333L6.5 4.83333V11.1667L3.83333 8.5V4.83333L0.5 0.5Z" stroke="#64748B" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

@@ -148,7 +148,7 @@ const Payinstallment = () => {
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
-                        className="text-white hover:bg-blue-700 bg-blue-500/30 p-2 rounded-xl text-sm font-semibold transition-all"
+                        className="text-white hover:bg-blue-700 bg-blue-500/30 p-2 rounded-xl text-sm font-semibold transition-all cursor-pointer"
                     >
                         Go Back
                     </button>
@@ -274,7 +274,7 @@ const Payinstallment = () => {
                             type="button"
                             disabled={submitting || isPaidSuccess}
                             onClick={() => navigate(-1)}
-                            className={`w-1/3 h-11 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm transition-all ${(submitting || isPaidSuccess) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+                            className={`w-1/3 h-11 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm transition-all cursor-pointer ${(submitting || isPaidSuccess) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
                                 }`}
                         >
                             Cancel
@@ -284,7 +284,7 @@ const Payinstallment = () => {
                         <button
                             type="submit"
                             disabled={submitting || isInvalidAmount || isPaidSuccess}
-                            className={`w-2/3 h-11 rounded-xl text-white font-semibold text-sm transition-all flex justify-center items-center gap-2 shadow-md ${isPaidSuccess
+                            className={`w-2/3 h-11 rounded-xl text-white font-semibold text-sm transition-all flex justify-center items-center gap-2 shadow-md cursor-pointer ${isPaidSuccess
                                 ? 'bg-emerald-600 cursor-not-allowed shadow-none scale-100' // Transaction Success State
                                 : (submitting || isInvalidAmount)
                                     ? 'bg-gray-400 cursor-not-allowed shadow-none'          // Processing / Error State

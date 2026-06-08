@@ -122,7 +122,7 @@ const PendingInstallment = () => {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => console.log("Viewing Details for ID:", row.id)}
-                        className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+                        className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 cursor-pointer"
                         title="View Details"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -133,7 +133,7 @@ const PendingInstallment = () => {
 
                     <button
                         onClick={() => navigate('/pay-installment', { state: { installment: row } })}
-                        className='h-9 px-4 text-sm font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 active:scale-95 shadow-sm shadow-blue-200 transition-all duration-200'
+                        className='h-9 px-4 text-sm font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 active:scale-95 shadow-sm shadow-blue-200 transition-all duration-200 cursor-pointer'
                     >
                         Pay
                     </button>
@@ -177,7 +177,7 @@ const PendingInstallment = () => {
                         className='w-full h-11 pl-11 pr-4 rounded-xl border border-gray-200 bg-white text-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm'
                     />
                 </div>
-                <button className='flex items-center justify-center gap-2 w-full sm:w-auto px-5 h-11 rounded-xl border border-gray-200 bg-white shadow-sm text-gray-600 hover:bg-gray-50 active:scale-98 transition-all font-medium text-sm'>
+                <button className='flex items-center justify-center gap-2 w-full sm:w-auto px-5 h-11 rounded-xl border border-gray-200 bg-white shadow-sm text-gray-600 hover:bg-gray-50 active:scale-98 transition-all font-medium text-sm cursor-pointer'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                         <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
                     </svg>

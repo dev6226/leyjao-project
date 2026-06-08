@@ -320,7 +320,7 @@ const Sellproducts = () => {
                     type="button"
                     disabled={submitLoading}
                     onClick={() => navigate('/all-Customer')}
-                    className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 disabled:opacity-50 transition font-medium"
+                    className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 disabled:opacity-50 transition font-medium cursor-pointer"
                 >
                     <ChevronLeft className="w-4 h-4" />
                     <span className='cursor-pointer'>Back to Customers</span>
@@ -508,21 +508,21 @@ const Sellproducts = () => {
                                             <button
                                                 type="button"
                                                 onClick={capturePhoto}
-                                                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-md transition"
+                                                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-md transition cursor-pointer"
                                             >
                                                 Capture Photo
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={toggleCamera}
-                                                className="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold shadow-md transition"
+                                                className="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold shadow-md transition cursor-pointer"
                                             >
                                                 Switch Camera
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={stopCamera}
-                                                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-md transition"
+                                                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-md transition cursor-pointer"
                                             >
                                                 Cancel
                                             </button>
@@ -540,7 +540,7 @@ const Sellproducts = () => {
                                                 type="button"
                                                 disabled={submitLoading}
                                                 onClick={() => setProductImageFile(null)}
-                                                className="px-3 py-1.5 bg-rose-600 text-white text-xs font-semibold rounded hover:bg-rose-700 transition disabled:opacity-50"
+                                                className="px-3 py-1.5 bg-rose-600 text-white text-xs font-semibold rounded hover:bg-rose-700 transition disabled:opacity-50 cursor-pointer"
                                             >
                                                 Remove Photo
                                             </button>
@@ -562,7 +562,7 @@ const Sellproducts = () => {
                                             type="button"
                                             disabled={submitLoading}
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="px-4 py-2 border border-[#E1E7EF] bg-white hover:bg-gray-50 text-gray-700 text-xs sm:text-sm font-semibold rounded-lg transition shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-4 py-2 border border-[#E1E7EF] bg-white hover:bg-gray-50 text-gray-700 text-xs sm:text-sm font-semibold rounded-lg transition shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed "
                                         >
                                             Upload from Device
                                         </button>

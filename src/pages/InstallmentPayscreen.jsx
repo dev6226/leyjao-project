@@ -167,14 +167,14 @@ const InstallmentPayscreen = () => {
                 <div className="flex justify-center gap-4 mt-5 flex-wrap">
                     <button
                         onClick={() => window.print()}
-                        className="flex items-center gap-2 px-6 py-2.5 rounded-lg border border-green-500 text-green-600 bg-green-50 font-semibold text-sm hover:bg-green-100 transition"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-lg border border-green-500 text-green-600 bg-green-50 font-semibold text-sm hover:bg-green-100 transition cursor-pointer"
                     >
                         <LocalPrintshopOutlinedIcon fontSize="small" />
                         Print
                     </button>
                     <button
                         onClick={() => alert('Download')}
-                        className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-900 text-white font-semibold text-sm hover:bg-blue-800 transition"
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-900 text-white font-semibold text-sm hover:bg-blue-800 transition cursor-pointer"
                     >
                         <FileDownloadOutlinedIcon fontSize="small" />
                         Download

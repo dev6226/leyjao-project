@@ -18,7 +18,7 @@ const MobileNavItem = ({ item }) => {
   if (item.submenu) {
     return (
       <li className="relative">
-        <button onClick={() => setOpen(!open)} className="group flex h-[60px] w-full items-center gap-3 rounded-lg bg-white px-3 text-sm font-medium text-[#0F172A] transition-all duration-200 hover:bg-[#BD2F30] hover:text-white">
+        <button onClick={() => setOpen(!open)} className="group flex h-[60px] w-full items-center gap-3 rounded-lg bg-white px-3 text-sm font-medium text-[#0F172A] transition-all duration-200 hover:bg-[#BD2F30] hover:text-white cursor-pointer">
           <span className="flex-1 text-left text-[14px] font-medium">{item.label}</span>
           <svg className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M19 9l-7 7-7-7" />
@@ -113,13 +113,13 @@ const Navbar = () => {
 
             <div className="flex items-center gap-4">
               {/* Notification & Profile same rahega */}
-              <button type="button" className="relative h-[38px] w-[38px] flex items-center justify-center rounded-[8px] bg-[#F1F5F9]">
+              <button type="button" className="relative h-[38px] w-[38px] flex items-center justify-center rounded-[8px] bg-[#F1F5F9] cursor-pointer">
                 <span className="absolute -top-2 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-[3px] bg-[#BD2F30] text-[10px] font-semibold text-white">2</span>
                 <BellIcon />
               </button>
 
               <div className="relative">
-                <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-3 px-3 py-1 focus:outline-none">
+                <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-3 px-3 py-1 focus:outline-none cursor-pointer">
                   <div className="h-10 w-10 overflow-hidden rounded-full bg-indigo-100">
                     <img src={Profile} alt="Profile" className="h-full w-full object-cover" />
                   </div>
@@ -130,8 +130,8 @@ const Navbar = () => {
                 </button>
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Profile</a>
+                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Logout</button>
                   </div>
                 )}
               </div>
@@ -148,14 +148,14 @@ const Navbar = () => {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white">
+          <button type="button" className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white cursor-pointer">
             <span className="absolute -top-1 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-full bg-[#BD2F30] text-[10px] font-semibold text-white">2</span>
             <BellIcon />
           </button>
           <div className="h-10 w-10 overflow-hidden rounded-full bg-indigo-100">
             <img src={Profile} alt="Profile" className="h-full w-full object-cover" />
           </div>
-          <button onClick={() => setDrawerOpen(true)} type="button" className="flex h-10 w-10 items-center justify-center">
+          <button onClick={() => setDrawerOpen(true)} type="button" className="flex h-10 w-10 items-center justify-center cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 20 12" fill="none">
               <path d="M1 11H19M1 6H19M1 1H19" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -174,7 +174,7 @@ const Navbar = () => {
               <img src={Logo} alt="LeyJao logo" className="h-full w-full object-contain" />
             </span>
           </div>
-          <button onClick={() => setDrawerOpen(false)} className="flex h-10 w-10 items-center justify-center">
+          <button onClick={() => setDrawerOpen(false)} className="flex h-10 w-10 items-center justify-center cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M20 20L4 4.00003M20 4L4.00002 20" stroke="#000000" strokeWidth="2" strokeLinecap="round" />
             </svg>
