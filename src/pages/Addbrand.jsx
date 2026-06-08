@@ -1,28 +1,35 @@
 import React, { useState, useRef } from 'react'
-import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import api from '../api/api'
 
-const Addbrand = () => {
+const Addbrand = ({ fetchBrands }) => { // Added fetchBrands prop if passed down
+    const navigate = useNavigate();
 
     const [createBrand, setCreateBrand] = useState([])
     const [preview, setPreview] = useState(null)
     const [search, setSearch] = useState("")
-    const [file, setFile] = useState("")
+    const [file, setFile] = useState(null) // Changed default to null for clean object checks
     const fileref = useRef(null);
 
     const handleFileChange = (event) => {
         const imagefile = event.target.files[0];
+
+        if (!imagefile) {
+            return;
+        }
+
+        // Validate directly using the fresh 'imagefile' instead of the state 'file'
+        if (!imagefile.type.startsWith("image/")) {
+            toast.error("Please select a valid image file (JPG, PNG, SVG).");
+            // Clear input so user can try selecting again
+            if (fileref.current) fileref.current.value = "";
+            return;
+        }
+
         console.log("Selected file:", imagefile);
         setFile(imagefile);
         setPreview(URL.createObjectURL(imagefile));
-
-        if (!file) {
-            return;
-        }
-
-        if (!file.type.startsWith("image/")) {
-            alert("Please select a valid image file (JPG, PNG, SVG).");
-            return;
-        }
     }
 
     const handleButtonclick = () => {
@@ -31,30 +38,56 @@ const Addbrand = () => {
 
     // fetch-api
     const handleSave = async () => {
-        try {
-            const token = sessionStorage.getItem("token");
-            console.log("token", token)
-            const formData = new FormData();
-            formData.append("name", search);
-            formData.append("image", file);
-            const res = await axios.post("https://stage.leyjao.pk/api/brand/store", formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                }
-            })
-            console.log("formData", formData);
-            console.log("response", res.data);
-            setCreateBrand(res.data.data);
-            setSearch("");
-            setFile(null);
-            setPreview(null);
-            fetchBrands();
-        } catch (error) {
-            console.log("Error", error)
-
+        // Basic validation check
+        if (!search.trim() || !file) {
+            toast.error("Please provide both brand name and image");
+            return;
         }
-    }
+
+        try {
+            const formData = new FormData();
+            formData.append("name", search.trim());
+            formData.append("image", file);
+
+            // API Request
+            const res = await api.post("brand/store", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            console.log("response", res.data);
+
+            if (res.status === 200 || res.status === 201 || res.data?.success) {
+                toast.success("Brand created successfully");
+
+                setCreateBrand(res.data.data || res.data);
+
+                // Form clear
+                setSearch("");
+                setFile(null);
+                setPreview(null);
+                if (fileref.current) fileref.current.value = "";
+
+                // List refresh
+                if (typeof fetchBrands === "function") {
+                    fetchBrands();
+                }
+
+                setTimeout(() => {
+                    navigate("/brand-list");
+                }, 1500);
+
+            } else {
+                toast.error(res.data?.message || "Failed to create brand");
+            }
+
+        } catch (error) {
+            console.error("Error saving brand:", error);
+            const serverMessage = error.response?.data?.message || "Something went wrong. Please try again.";
+            toast.error(serverMessage);
+        }
+    };
 
     return (
         <div>
@@ -66,11 +99,10 @@ const Addbrand = () => {
                     Create a new brand to use in inventory.
                 </p>
             </div>
-            {/* new-brand */}
+
             <div className='mt-5 gap-4'>
                 <div className='bg-white rounded-xl border border-[#E1E7EF] shadow-[0px_3px_4px_rgba(218,218,218,0.6)]'>
                     <div className='p-4 sm:p-6'>
-                        {/* Form Grid */}
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
 
                             {/* Brand Name */}
@@ -107,7 +139,6 @@ const Addbrand = () => {
                                 <label className='text-sm sm:text-base font-semibold text-primary'>
                                     Brand Logo
                                 </label>
-
                                 <p className='text-secondary text-xs sm:text-sm mt-1'>
                                     Upload brand logo (JPG, PNG, SVG - Max size 2MB)
                                 </p>
@@ -116,55 +147,62 @@ const Addbrand = () => {
                                     <div className='max-w-lg min-h-[180px] sm:min-h-[220px] md:min-h-[253px] 
                                         bg-[#FCFDFE] border-2 border-dashed border-[#E1E7EF] 
                                         rounded-lg flex items-center justify-center cursor-pointer 
-                                        px-4 text-center'>
-                                        {
-                                            preview ? (
-                                                <img src={preview} alt="" className="w-full h-full mt-3 rounded" />
-                                            ) : (
-                                                <div className='flex flex-col items-center gap-2 sm:gap-3'>
-
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="w-10 h-10 sm:w-14 sm:h-12 md:w-16 md:h-[51px]"
-                                                        viewBox="0 0 64 51"
-                                                        fill="none"
-                                                    >
-                                                        {/* paths same */}
-                                                    </svg>
-
-                                                    <p className='text-secondary text-xs sm:text-sm'>
-                                                        Drag & drop your image here
-                                                    </p>
-
-                                                    <p className='text-secondary text-xs sm:text-sm'>
-                                                        or
-                                                    </p>
-
-                                                    <input type="file" ref={fileref} onChange={handleFileChange} accept='image/*' onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\\s]/g, '') }} className='hidden' />
-
-                                                    <button onClick={handleButtonclick} className='w-[120px] sm:w-[135px] h-8 sm:h-9 text-sm 
-                                                bg-[#0062BD] text-white rounded-lg cursor-pointer'>
-                                                        Upload Logo
-                                                    </button>
-                                                </div>
-                                            )
-                                        }
+                                        px-4 text-center'
+                                        onClick={!preview ? handleButtonclick : undefined}
+                                    >
+                                        {preview ? (
+                                            <div className="relative w-full h-full p-2">
+                                                <img src={preview} alt="Preview" className="max-h-[200px] mx-auto rounded object-contain" />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setPreview(null);
+                                                        setFile(null);
+                                                        if (fileref.current) fileref.current.value = "";
+                                                    }}
+                                                    className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className='flex flex-col items-center gap-2 sm:gap-3'>
+                                                <p className='text-secondary text-xs sm:text-sm'>
+                                                    Click to upload your image here
+                                                </p>
+                                                <input
+                                                    type="file"
+                                                    ref={fileref}
+                                                    onChange={handleFileChange}
+                                                    accept='image/*'
+                                                    className='hidden'
+                                                />
+                                                <span className='w-[120px] sm:w-[135px] py-1.5 text-sm bg-[#0062BD] text-white rounded-lg inline-block'>
+                                                    Upload Logo
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-
                 </div>
-                {/* button */}
+
+                {/* Actions */}
                 <div className='flex justify-end gap-x-3 mt-8'>
-                    <button className='w-24 h-11 sm:h-9 text-sm 
-                            bg-[#FFFFFF] rounded-lg border-1 border-[#65758B] text-[#65758B] font-medium text-base cursor-pointer'>
+                    <button
+                        type="button"
+                        onClick={() => navigate("/brand-list")}
+                        className='w-24 h-11 sm:h-9 text-sm bg-[#FFFFFF] rounded-lg border border-[#65758B] text-[#65758B] font-medium cursor-pointer'
+                    >
                         Cancel
                     </button>
-                    <button onClick={handleSave} className='w-24 h-11 sm:h-9 text-sm 
-                            bg-[#2196F3] rounded-lg  text-[#FFFFFF] font-medium text-base cursor-pointer'>
+                    <button
+                        onClick={handleSave}
+                        className='w-24 h-11 sm:h-9 text-sm bg-[#2196F3] rounded-lg text-[#FFFFFF] font-medium cursor-pointer'
+                    >
                         Save
                     </button>
                 </div>
@@ -173,4 +211,4 @@ const Addbrand = () => {
     )
 }
 
-export default Addbrand
+export default Addbrand;

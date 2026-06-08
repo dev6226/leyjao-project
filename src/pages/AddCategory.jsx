@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 const AddCategory = () => {
     const [input, setInput] = useState("")
     const [createCategory, setCreateCategory] = useState([])
 
+    const navigate = useNavigate();
     const token = sessionStorage.getItem("token");
     const fomrdata = new FormData();
     fomrdata.append("name", input);
@@ -16,11 +18,14 @@ const AddCategory = () => {
                 }
             })
             console.log("category-Data", res.data);
+            toast.success("Category created successfully");
             setCreateCategory(res.data)
-            setInput("")
+            setInput("");
+            setTimeout(() => {
+                navigate("/category-list")
+            }, 1500);
         } catch (error) {
-            console.log('error', error)
-
+            toast.error("Category created failed", error.message);
         }
     }
     return (

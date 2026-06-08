@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 const BrandList = () => {
+    const navigate = useNavigate();
     const [brands, setBrands] = useState([]);
     // updated-state
     const [isModel, setIsModel] = useState(null);
@@ -64,14 +67,15 @@ const BrandList = () => {
                     }
                     : brand
             );
+            toast.success("Brand updated successfully");
             setBrands(updatedBrands);
             setIsModel(false);
-            window.location.reload();
 
 
         } catch (error) {
             console.log("update ka error hai ", error.response);
             console.log("update ka error hai data ka ", error.response?.data);
+            toast.error("Brand update failed", error.message);
         }
     }
 
@@ -88,14 +92,20 @@ const BrandList = () => {
                 },
             });
             setBrands((prev) => prev.filter((item) => item.id !== id));
+            toast.success("Brand deleted successfully");
         } catch (error) {
-
+            toast.error("Brand delete failed", error.message);
         }
     }
 
     return (
         <div className="p-4 md:p-2">
             <div className="">
+                <div className="flex justify-end">
+                    <button className="bg-[#0062BD] text-white px-4 py-2 rounded-lg text-sm font-medium mb-3 cursor-pointer " onClick={() => navigate("/add-brand")}>
+                        Add Brand
+                    </button>
+                </div>
                 <div className="w-full bg-[#FFFFFF] border border-[#E1E7EF] rounded-lg overflow-hidden overflow-x-auto">
                     <div className="min-w-[700px]">
                         {/* Header */}

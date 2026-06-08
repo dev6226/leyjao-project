@@ -32,13 +32,13 @@ const navItems = [
     // ── CATALOGUE ──────────────────────────────
     {
         label: 'Catalogue', icon: '/assets/logo10.png', submenu: [
-            { label: 'Add Brand', href: '/add-brand' },
+            // { label: 'Add Brand', href: '/add-brand' },
             { label: 'Brand List', href: '/brand-list' },
-            { label: 'Add Category', href: '/add-category' },
+            // { label: 'Add Category', href: '/add-category' },
             { label: 'Category List', href: '/category-list' },
-            { label: 'Add Series', href: '/add-series' },
+            // { label: 'Add Series', href: '/add-series' },
             { label: 'Series List', href: '/series-list' },
-            { label: 'Add Models', href: '/add-models' },
+            // { label: 'Add Models', href: '/add-models' },
             { label: 'Models List', href: '/models-list' },
         ]
     },

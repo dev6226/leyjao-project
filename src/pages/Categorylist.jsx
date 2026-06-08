@@ -1,7 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Categorylist = () => {
+    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [isModel, setIsModel] = useState(null);
     const [name, setName] = useState("");
@@ -42,8 +45,9 @@ const Categorylist = () => {
                 },
             });
             setCategories((prev) => prev.filter((item) => item.id !== id));
+            toast.success("Category deleted successfully");
         } catch (error) {
-            console.log("delete error", error);
+            toast.error("Category delete failed", error.message);
         }
     }
 
@@ -67,6 +71,7 @@ const Categorylist = () => {
                 }
             })
             console.log("my updated-response", res.data.data);
+            toast.success("Category updated successfully");
             // updateUI without pagereload
             const updatedCategories = categories.map((category) =>
                 category.id === selectedcategory.id
@@ -79,13 +84,17 @@ const Categorylist = () => {
             setCategories(updatedCategories);
             setIsModel(false);
         } catch (error) {
-            console.log("update ka error hai ", error.response);
-            console.log("update ka error hai data ka ", error.response?.data);
+            toast.error("Category update failed", error.message);
         }
     }
 
     return (
         <div>
+            <div className="flex justify-end">
+                <button className="bg-[#0062BD] text-white px-4 py-2 rounded-lg text-sm font-medium mb-3 cursor-pointer " onClick={() => navigate("/add-category")}>
+                    Add Category
+                </button>
+            </div>
             <div className="p-4 md:p-6">
                 <div>
                     <div className="w-full bg-[#FFFFFF] border border-[#E1E7EF] rounded-lg overflow-hidden overflow-x-auto">

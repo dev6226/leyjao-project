@@ -1,12 +1,21 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Series = () => {
     const [input, setInput] = useState("")
-
+    const navigate = useNavigate();
     const handleSave = async () => {
         const token = sessionStorage.getItem("token");
-        console.log("token", token)
+        if (!token) {
+            toast.error("You are not authorized");
+            return;
+        }
+        if (!input) {
+            toast.error("Please enter series name");
+            return;
+        }
         const formdata = new FormData();
         formdata.append("name", input);
         // API call to save the series would go here, using the token for authentication
@@ -17,9 +26,13 @@ const Series = () => {
                 }
             })
             console.log("series-Data", res.data);
+            toast.success("Series created successfully");
             setInput("")
+            setTimeout(() => {
+                navigate("/series-list");
+            }, 1500);
         } catch (error) {
-            console.log('error', error)
+            toast.error("Series creation failed", error.message);
 
         }
     }

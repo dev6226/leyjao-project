@@ -1,14 +1,25 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 const ProductModle = () => {
   const [input, setInput] = useState("")
   const [createModel, setCreateModel] = useState([])
+  const navigate = useNavigate();
 
   const token = sessionStorage.getItem("token");
-  const fomrdata = new FormData();
-  fomrdata.append("name", input);
   const handleSave = async () => {
+    if (!input) {
+      toast.error("Please enter model name");
+      return;
+    }
+    if (!token) {
+      toast.error("You are not authorized");
+      return;
+    }
+    const fomrdata = new FormData();
+    fomrdata.append("name", input);
     try {
       const res = await axios.post('https://stage.leyjao.pk/api/product-model/store', fomrdata, {
         headers: {
@@ -17,14 +28,19 @@ const ProductModle = () => {
       })
       console.log("category-Data", res.data);
       setCreateModel(res.data)
+      toast.success("Model created successfully");
       setInput("")
+      setTimeout(() => {
+        navigate("/models-list");
+      }, 1500);
     } catch (error) {
-      console.log('error', error)
+      toast.error("Model creation failed", error.message);
 
     }
   }
   return (
     <div>
+
       <div>
         <h2 className='text-primary text-xl font-semibold'>
           Add New Models

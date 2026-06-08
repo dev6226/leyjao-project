@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const ModelsList = () => {
+    const navigate = useNavigate();
     const [models, setModels] = useState([]);
     const [isModel, setIsModel] = useState(null);
     const [name, setName] = useState("");
@@ -19,9 +22,10 @@ const ModelsList = () => {
                     },
                 })
                 console.log('category-list-api-data', res.data)
+                toast.success("Models list fetched successfully");
                 setModels(res.data.data);
             } catch (error) {
-                console.log('error', error)
+                toast.error("Failed to fetch models", error.message);
             }
         }
         fetchModelsList();
@@ -41,9 +45,10 @@ const ModelsList = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            toast.success("Model deleted successfully");
             setModels((prev) => prev.filter((item) => item.id !== id));
         } catch (error) {
-            console.log("delete error", error);
+            toast.error("Failed to delete model", error.message);
         }
     }
 
@@ -78,14 +83,19 @@ const ModelsList = () => {
             );
             setModels(updatedModles);
             setIsModel(false);
+            toast.success("Model updated successfully");
         } catch (error) {
-            console.log("update ka error hai ", error.response);
-            console.log("update ka error hai data ka ", error.response?.data);
+            toast.error("Failed to update model", error.message);
         }
     }
 
     return (
         <div>
+            <div className="flex justify-end">
+                <button className="bg-[#0062BD] text-white px-4 py-2 rounded-lg text-sm font-medium mb-3 cursor-pointer " onClick={() => navigate("/add-models")}>
+                    Add Model
+                </button>
+            </div>
             <div className="p-4 md:p-6">
                 <div>
                     <div className="w-full bg-[#FFFFFF] border border-[#E1E7EF] rounded-lg overflow-hidden overflow-x-auto">
