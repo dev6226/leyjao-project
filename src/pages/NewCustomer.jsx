@@ -42,6 +42,21 @@ const NewCustomer = () => {
   const [chequePersonName, setChequePersonName] = useState("")
   const [chequeCnic, setChequeCnic] = useState("")
 
+
+  // 1. State setup (Isko apne states wale section mein paste karein)
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+  // date
+  const [date, setDate] = useState(getCurrentDateTime());
+
   // ── Guarantor 1 (static) states ─────────────
   const [g1, setG1] = useState({
     fullName: "", fatherName: "", cnic: "", phone: "",
@@ -101,6 +116,13 @@ const NewCustomer = () => {
       data.append('salary', salary)
       data.append('office_phone', workPhone)
       data.append('status', 'draft')
+      const [datePart, timePart] = date.split('T');
+      const [h, m] = timePart.split(':');
+      const hNum = parseInt(h);
+      const ampm = hNum >= 12 ? 'pm' : 'am';
+      const h12 = String(hNum % 12 || 12).padStart(2, '0');
+      data.append('date', `${datePart} ${h12}:${m} ${ampm}`);
+
 
       // ── Customer CNIC Photos ───────────────────
       if (frontRef.current?.files[0])
@@ -216,6 +238,12 @@ const NewCustomer = () => {
                 <input type='text' placeholder='Enter full name' value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   onInput={(e) => { e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '') }}
+                  className={inputClass} />
+              </div>
+              <div>
+                <label className='text-sm sm:text-base font-semibold text-primary'>Date & Time*</label>
+                <input type='datetime-local' value={date}
+                  onChange={(e) => setDate(e.target.value)}
                   className={inputClass} />
               </div>
               <div>

@@ -41,9 +41,7 @@ const AllCustomer = () => {
 
         const mapped = data.map((customer) => ({
           id: customer.id,
-          date: customer.created_at
-            ? new Date(customer.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-            : '-',
+          date: customer.date || '-',
           cn: customer.cn || customer.customer_number || '-',
           name: customer.full_name || '-',
           phone: customer.phone || '-',
