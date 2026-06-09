@@ -23,7 +23,7 @@ export default function Login() {
       // store token
       sessionStorage.setItem(
         "token",
-        res.data.data.refresh_token
+        res.data.data.access_token
       );
 
       console.log("Login success");
